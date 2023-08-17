@@ -12,6 +12,8 @@ navigation-fragment = "2.7.0"
 navigation-ui = "2.7.0"
 kotlin-stdlib = "1.9.0"
 kotlin-stdlib-jdk8 = "1.9.0"
+okhttp3 = "3.5.0"
+gson = "2.10.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,6 +28,8 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigation-ui" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin-stdlib" }
 kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin-stdlib-jdk8" }
+okhttp3 = { group = "com.growingio.android", name = "okhttp3", version.ref = "okhttp3" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

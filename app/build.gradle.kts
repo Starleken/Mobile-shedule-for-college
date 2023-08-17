@@ -46,6 +46,8 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.okhttp3)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
