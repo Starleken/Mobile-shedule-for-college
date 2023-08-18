@@ -10,7 +10,6 @@ public class Teacher {
     public String Phone;
     public Date DateFired;
     public String Image;
-    public int StudyID;
     public Study Study;
 
 }
