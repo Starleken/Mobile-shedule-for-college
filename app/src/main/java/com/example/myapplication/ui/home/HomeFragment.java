@@ -1,34 +1,40 @@
 package com.example.myapplication.ui.home;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Adapters.LessonAdapter;
-import com.example.myapplication.HTTPRequests.StudyGetter;
-import com.example.myapplication.HTTPRequests.TeacherGetter;
-import com.example.myapplication.Models.Lesson;
-import com.example.myapplication.Models.Study;
+import com.example.myapplication.HTTPRequests.PairGetter;
+import com.example.myapplication.Interfaces.PairCallback;
+import com.example.myapplication.Models.Audience.Group;
+import com.example.myapplication.Models.Pair;
 import com.example.myapplication.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private RecyclerView mondayRecyclerView;
+    private RecyclerView tuesdayRecyclerView;
+    private RecyclerView wednesdayRecyclerView;
+    private RecyclerView thursdayRecyclerView;
+    private RecyclerView fridayRecyclerView;
+    private RecyclerView saturdayRecyclerView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -38,39 +44,92 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        mondayRecyclerView = binding.MondayRecyclerView;
+        mondayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        TeacherGetter getter = new TeacherGetter();
-        Study study;
-        try {
-             getter.GetAll();
-        }
-        catch(Exception e){
-            Log.d("GGGGG", e.getMessage());
-        }
+        tuesdayRecyclerView = binding.TuesdayRecyclerView;
+        tuesdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        wednesdayRecyclerView = binding.WednesdayRecyclerView;
+        wednesdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        thursdayRecyclerView = binding.ThursdayRecyclerView;
+        thursdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        fridayRecyclerView = binding.FridayRecyclerView;
+        fridayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        saturdayRecyclerView = binding.SaturdayRecyclerView;
+        saturdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        binding.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SetPairs();
+            }
+        });
 
         return root;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState)
-        ;
-        RecyclerView lessonsRecyclerView = binding.MondayRecyclerView;
-        lessonsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        ArrayList<Lesson> lessons = new ArrayList<Lesson>();
-        lessons.add(new Lesson("sdvsdvsd"));
-        lessons.add(new Lesson("sdvsdvsd"));
-        lessons.add(new Lesson("sdvsdvsd"));
-
-        LessonAdapter adapter = new LessonAdapter(lessons, getContext());
-
-        lessonsRecyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void SetPairs(){
+        PairGetter getter = new PairGetter();
+        try {
+            Group group = new Group();
+            group.id = 1;
+            getter.GetAll(group,new PairCallback() {
+                @Override
+                public void OnSuccess(List<Pair> pairs) {
+                    Handler mHandler = new Handler(Looper.getMainLooper());
+
+                    HashMap<String, ArrayList<Pair>> dayPairsMap = new HashMap<>();
+
+                    for(Pair pair : pairs){
+                        String dayName = pair.dayOfWeek.name;
+                        if(!dayPairsMap.containsKey(dayName)){
+                            dayPairsMap.put(dayName, new ArrayList<Pair>());
+                        }
+                        dayPairsMap.get(dayName).add(pair);
+                    }
+
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
+                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext());
+
+                                if (entry.getKey().equals("Понедельник")){
+                                    mondayRecyclerView.setAdapter(dayAdapter);
+                                }
+                                else if(entry.getKey().equals("Вторник")){
+                                    tuesdayRecyclerView.setAdapter(dayAdapter);
+                                }
+                                else if(entry.getKey().equals("Среда")){
+                                    wednesdayRecyclerView.setAdapter(dayAdapter);
+                                }
+                                else if(entry.getKey().equals("Четверг")){
+                                    thursdayRecyclerView.setAdapter(dayAdapter);
+                                }
+                                else if(entry.getKey().equals("Пятница")){
+                                    fridayRecyclerView.setAdapter(dayAdapter);
+                                }
+                                else if(entry.getKey().equals("Суббота")){
+                                    saturdayRecyclerView.setAdapter(dayAdapter);
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        catch(Exception e){
+            Log.d("GGGGG", e.getMessage());
+        }
     }
 }

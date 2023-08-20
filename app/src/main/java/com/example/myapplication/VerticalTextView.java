@@ -52,12 +52,12 @@ public class VerticalTextView extends AppCompatTextView {
         if ( side )
         {
             canvas.translate( getWidth(), 0 );
-            canvas.rotate( 90 );    //в нашем компоненте при android:gravity="bottom|right"
+            canvas.rotate( 90 );
         }
         else
         {
             canvas.translate( 0, getHeight() );
-            canvas.rotate( -90 );   //в нашем компоненте при android:gravity="top|right"
+            canvas.rotate( -90 );
         }
 
         canvas.translate( getCompoundPaddingLeft(),

@@ -11,4 +11,6 @@
     <color name="WhiteTextOnGreen">#E2E2E2</color>
 
     <color name="LectureLessonColor">#CFFDB3</color>
+
+    <color name="SettingsButton">#E2E2E2</color>
 </resources>

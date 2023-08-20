@@ -7,49 +7,64 @@
 
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/Background"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="#00FFFFFF"
-        app:srcCompat="@drawable/lecture_lesson"
+        android:background="@drawable/lecture_lesson"
+        android:backgroundTint="@color/LectureLessonColor"
         tools:layout_editor_absoluteX="24dp"
         tools:layout_editor_absoluteY="20dp" />
 
+    <com.example.myapplication.VerticalTextView
+        android:id="@+id/TimeText"
+        android:layout_width="28dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#FF0000"
+        android:gravity="bottom|right"
+        android:text="11:40-13:10"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintStart_toStartOf="@+id/Background"
+        app:layout_constraintTop_toTopOf="@+id/Background" />
+
     <TextView
         android:id="@+id/TeacherNameTextView"
-        android:layout_width="86dp"
-        android:layout_height="21dp"
+        android:layout_width="320dp"
+        android:layout_height="19dp"
+        android:text="Базуев В.М"
         android:textColor="@color/black"
-        android:text=" Базуев В.М"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
-        app:layout_constraintHorizontal_bias="0.164"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+        app:layout_constraintEnd_toEndOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="@+id/Background"
+        app:layout_constraintTop_toTopOf="@+id/Background" />
 
     <TextView
         android:id="@+id/LessonName"
         android:layout_width="269dp"
         android:layout_height="39dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="16dp"
         android:text="Русский язык"
+        android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
-        app:layout_constraintHorizontal_bias="0.346"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+        app:layout_constraintEnd_toEndOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.345"
+        app:layout_constraintStart_toStartOf="@+id/Background"
+        app:layout_constraintTop_toTopOf="@+id/Background" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/AudienceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:textColor="@color/black"
-        android:text="ауд 43.к 15"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        android:text="ауд. 43 к. 15"
+        app:layout_constraintEnd_toEndOf="@+id/Background"
         app:layout_constraintHorizontal_bias="0.157"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+        app:layout_constraintStart_toStartOf="@+id/Background"
+        app:layout_constraintTop_toTopOf="@+id/Background" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
