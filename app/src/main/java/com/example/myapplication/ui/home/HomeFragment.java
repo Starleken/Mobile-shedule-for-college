@@ -19,6 +19,7 @@ import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.Interfaces.PairCallback;
 import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Pair;
+import com.example.myapplication.TestGetGroup;
 import com.example.myapplication.databinding.FragmentHomeBinding;
 
 import java.util.ArrayList;
@@ -81,9 +82,7 @@ public class HomeFragment extends Fragment {
     private void SetPairs(){
         PairGetter getter = new PairGetter();
         try {
-            Group group = new Group();
-            group.id = 1;
-            getter.GetAll(group,new PairCallback() {
+            getter.GetGroupPairs(TestGetGroup.group,new PairCallback() {
                 @Override
                 public void OnSuccess(List<Pair> pairs) {
                     Handler mHandler = new Handler(Looper.getMainLooper());

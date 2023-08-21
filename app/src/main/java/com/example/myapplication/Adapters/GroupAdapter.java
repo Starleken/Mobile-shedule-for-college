@@ -15,14 +15,22 @@ import com.example.myapplication.Models.Pair;
 import com.example.myapplication.R;
 import com.example.myapplication.VerticalTextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
+    public interface OnGroupClickListener{
+        public void OnGroupClick(Group group);
+    }
+
+    private OnGroupClickListener onGroupClickListener;
     private List<Group> groups;
     private Context context;
-    public GroupAdapter(List<Group> groups, Context context){
+    public GroupAdapter(List<Group> groups, Context context, OnGroupClickListener listener){
         this.groups = groups;
         this.context = context;
+        this.onGroupClickListener = listener;
     }
 
     @NonNull
@@ -35,7 +43,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-
+        Group group = groups.get(position);
+        holder.groupText.setText(group.name);
     }
 
     @Override
@@ -43,10 +52,18 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         return groups.size();
     }
 
-    public static class GroupViewHolder extends RecyclerView.ViewHolder {
-
-        public GroupViewHolder(View itemView) {
+    public class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView groupText;
+        public GroupViewHolder(View itemView)
+        {
             super(itemView);
+            groupText = itemView.findViewById(R.id.GroupText);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onGroupClickListener.OnGroupClick(groups.get(getAdapterPosition()));
         }
     }
 }

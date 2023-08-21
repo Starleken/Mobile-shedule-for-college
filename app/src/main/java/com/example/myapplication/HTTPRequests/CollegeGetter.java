@@ -2,13 +2,12 @@ package com.example.myapplication.HTTPRequests;
 
 import android.util.Log;
 
-import com.example.myapplication.Interfaces.PairCallback;
-import com.example.myapplication.Models.Audience.Group;
-import com.example.myapplication.Models.Pair;
+import com.example.myapplication.Interfaces.CollegeCallback;
+import com.example.myapplication.Models.College;
+import com.example.myapplication.Models.Faculty;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,15 +18,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class PairGetter {
-    final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/pairs?isCurrentDate=1&groupId=";
+public class CollegeGetter {
+    final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/colleges/";
 
-    public void GetGroupPairs(Group group, PairCallback pairCallback) throws Exception {
+    public void GetAll(CollegeCallback callback) throws Exception {
         Gson gson = new Gson();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(MessageFormat.format("{0}{1}", URL_TO_READ, group.id))
+                .url(URL_TO_READ)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -43,8 +42,8 @@ public class PairGetter {
                         throw new IOException("Запрос к серверу не был успешен: " +
                                 response.code() + " " + response.message());
                     }
-                    List<Pair> pairs = Arrays.asList(gson.fromJson(responseBody.string(), Pair[].class));
-                    pairCallback.OnSuccess(pairs);
+                    List<College> colleges = Arrays.asList(gson.fromJson(responseBody.string(), College[].class));
+                    callback.OnSuccess(colleges);
                 } catch (Exception e) {
                     Log.d("eeeeeee", e.getMessage());
                 }
