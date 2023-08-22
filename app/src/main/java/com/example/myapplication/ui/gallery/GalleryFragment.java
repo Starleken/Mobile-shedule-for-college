@@ -60,6 +60,9 @@ public class GalleryFragment extends Fragment {
     }
 
     private void setFaculties(){
+        TestGetGroup.course = new Course();
+        TestGetGroup.course.id = 4;
+
         LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -67,18 +70,19 @@ public class GalleryFragment extends Fragment {
             @Override
             public void OnGroupClick(Group group) {
                 TestGetGroup.group = group;
-                Log.d("1111", group.name);
             }
         };
         CourseAdapter.OnCourseClickListener courseClickListener = new CourseAdapter.OnCourseClickListener() {
             @Override
             public void onCourseClick(Course course) {
+                TestGetGroup.course = course;
+                ((FacultyAdapter)facultyRecyclerView.getAdapter()).UpdateData();
+
                 groupRecyclerView.setLayoutManager(horizontalLayoutManager);
                 GroupAdapter groupAdapter = new GroupAdapter(course.groups, getContext(), groupClickListener);
                 groupRecyclerView.setAdapter(groupAdapter);
             }
         };
-
 
         try {
             Handler mHandler = new Handler(Looper.getMainLooper());
@@ -90,7 +94,7 @@ public class GalleryFragment extends Fragment {
                         @Override
                         public void run() {
                             facultyRecyclerView.setLayoutManager(verticalLayoutManager);
-                            FacultyAdapter facultyAdapter = new FacultyAdapter(colleges.get(0).faculties, getContext(), courseClickListener);
+                            FacultyAdapter facultyAdapter = new FacultyAdapter(colleges.get(0).faculties, getContext(), TestGetGroup.course, courseClickListener);
                             facultyRecyclerView.setAdapter(facultyAdapter);
                         }
                     });

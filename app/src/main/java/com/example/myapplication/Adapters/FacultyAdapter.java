@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Models.Audience.Group;
+import com.example.myapplication.Models.Course;
 import com.example.myapplication.Models.Faculty;
 import com.example.myapplication.R;
 
@@ -20,11 +21,13 @@ public class FacultyAdapter extends RecyclerView.Adapter<FacultyAdapter.FacultyV
     private List<Faculty> faculties;
     private Context context;
     private CourseAdapter.OnCourseClickListener clickListener;
+    private Course selectedCourse;
 
-    public FacultyAdapter(List<Faculty> faculties, Context context, CourseAdapter.OnCourseClickListener listener){
+    public FacultyAdapter(List<Faculty> faculties, Context context, Course course, CourseAdapter.OnCourseClickListener listener){
         this.faculties = faculties;
         this.context = context;
         this.clickListener = listener;
+        this.selectedCourse = course;
     }
 
     @NonNull
@@ -35,9 +38,13 @@ public class FacultyAdapter extends RecyclerView.Adapter<FacultyAdapter.FacultyV
         return new FacultyAdapter.FacultyViewHolder(v);
     }
 
+    public void UpdateData(){
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull FacultyAdapter.FacultyViewHolder holder, int position) {
-        CourseAdapter adapter = new CourseAdapter(faculties.get(position).courses, context, clickListener);
+        CourseAdapter adapter = new CourseAdapter(faculties.get(position).courses, context, selectedCourse,clickListener);
 
         holder.facultyText.setText(faculties.get(position).name);
         holder.coursesRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));

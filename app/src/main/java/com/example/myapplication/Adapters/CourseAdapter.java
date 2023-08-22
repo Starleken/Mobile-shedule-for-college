@@ -17,9 +17,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Course;
 import com.example.myapplication.Models.Faculty;
 import com.example.myapplication.R;
+import com.example.myapplication.TestGetGroup;
 
 import java.util.List;
 
@@ -29,16 +31,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         void onCourseClick(Course course);
     }
 
-    public int selectedPosition = 0;
-
+    private Course selectedCourse;
     private final OnCourseClickListener onClickListener;
-
     private List<Course> courses;
     private Context context;
-    public CourseAdapter(List<Course> courses, Context context, OnCourseClickListener clickListener){
+    public CourseAdapter(List<Course> courses, Context context, Course selectedCourse, OnCourseClickListener clickListener){
         this.courses = courses;
         this.context = context;
         this.onClickListener = clickListener;
+        this.selectedCourse = selectedCourse;
     }
 
     @NonNull
@@ -52,10 +53,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public void onBindViewHolder(@NonNull CourseAdapter.CourseViewHolder holder, int position) {
         Course course = courses.get(position);
-
         holder.groupText.setText(Integer.toString(course.name));
-        Log.d("11111", Integer.toString(selectedPosition));
-        int colorId = selectedPosition == course.id ? R.color.CollegeGreen : R.color.purple_500;
+        int colorId = TestGetGroup.course.id ==  courses.get(position).id ? R.color.CollegeGreen : R.color.purple_500;
         holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, colorId));
     }
 
@@ -80,10 +79,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         public void onClick(View v) {
             if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
 
-            notifyItemChanged(selectedPosition);
-            selectedPosition = courses.get(getAdapterPosition()).id;
-            notifyItemChanged(selectedPosition);
             onClickListener.onCourseClick(courses.get(getAdapterPosition()));
+
+            notifyDataSetChanged();
         }
     }
 }
