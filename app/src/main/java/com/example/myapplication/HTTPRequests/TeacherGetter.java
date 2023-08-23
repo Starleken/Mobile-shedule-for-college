@@ -16,7 +16,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class TeacherGetter {
-    final private String URL_TO_READ = "http://10.0.2.2:5002/api/v1/teachers/2";
+    final private String URL_TO_READ = "http://10.0.2.2:5002/api/v1/teachers";
 
     public void GetAll() throws Exception{
         Gson gson = new Gson();

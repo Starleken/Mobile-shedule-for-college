@@ -1,11 +1,6 @@
 package com.example.myapplication.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Course;
-import com.example.myapplication.Models.Faculty;
 import com.example.myapplication.R;
 import com.example.myapplication.TestGetGroup;
 
@@ -31,15 +23,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         void onCourseClick(Course course);
     }
 
-    private Course selectedCourse;
     private final OnCourseClickListener onClickListener;
     private List<Course> courses;
     private Context context;
-    public CourseAdapter(List<Course> courses, Context context, Course selectedCourse, OnCourseClickListener clickListener){
+    public CourseAdapter(List<Course> courses, Context context, OnCourseClickListener clickListener){
         this.courses = courses;
         this.context = context;
         this.onClickListener = clickListener;
-        this.selectedCourse = selectedCourse;
     }
 
     @NonNull
@@ -54,7 +44,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     public void onBindViewHolder(@NonNull CourseAdapter.CourseViewHolder holder, int position) {
         Course course = courses.get(position);
         holder.groupText.setText(Integer.toString(course.name));
-        int colorId = TestGetGroup.course.id ==  courses.get(position).id ? R.color.CollegeGreen : R.color.purple_500;
+        int colorId = TestGetGroup.selectedCourseId ==  courses.get(position).id ? R.color.CollegeGreen : R.color.purple_500;
         holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, colorId));
     }
 
@@ -80,7 +70,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             if (getAdapterPosition() == RecyclerView.NO_POSITION) return;
 
             onClickListener.onCourseClick(courses.get(getAdapterPosition()));
-
             notifyDataSetChanged();
         }
     }

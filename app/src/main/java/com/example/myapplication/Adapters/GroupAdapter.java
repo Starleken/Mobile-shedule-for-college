@@ -8,14 +8,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Models.Audience.Group;
-import com.example.myapplication.Models.Pair;
 import com.example.myapplication.R;
-import com.example.myapplication.VerticalTextView;
-
-import org.w3c.dom.Text;
+import com.example.myapplication.TestGetGroup;
 
 import java.util.List;
 
@@ -45,6 +43,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groups.get(position);
         holder.groupText.setText(group.name);
+
+        int colorId = TestGetGroup.selectedGroupId ==  groups.get(position).id ? R.color.CollegeGreen : R.color.purple_500;
+        holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, colorId));
     }
 
     @Override
@@ -53,10 +54,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final ImageView background;
         final TextView groupText;
         public GroupViewHolder(View itemView)
         {
             super(itemView);
+            background = itemView.findViewById(R.id.GroupBackground);
             groupText = itemView.findViewById(R.id.GroupText);
             itemView.setOnClickListener(this);
         }
@@ -64,6 +67,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         @Override
         public void onClick(View view) {
             onGroupClickListener.OnGroupClick(groups.get(getAdapterPosition()));
+            notifyDataSetChanged();
         }
     }
 }

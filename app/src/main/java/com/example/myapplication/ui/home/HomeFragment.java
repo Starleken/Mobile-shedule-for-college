@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Adapters.LessonAdapter;
 import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.Interfaces.PairCallback;
-import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.TestGetGroup;
 import com.example.myapplication.databinding.FragmentHomeBinding;
@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView thursdayRecyclerView;
     private RecyclerView fridayRecyclerView;
     private RecyclerView saturdayRecyclerView;
+    private ProgressBar progressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -63,12 +64,9 @@ public class HomeFragment extends Fragment {
         saturdayRecyclerView = binding.SaturdayRecyclerView;
         saturdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        binding.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SetPairs();
-            }
-        });
+        progressBar = binding.AwaitProgressBar;
+
+        SetPairs();
 
         return root;
     }
@@ -82,7 +80,7 @@ public class HomeFragment extends Fragment {
     private void SetPairs(){
         PairGetter getter = new PairGetter();
         try {
-            getter.GetGroupPairs(TestGetGroup.group,new PairCallback() {
+            getter.GetGroupPairs(TestGetGroup.selectedGroupId,new PairCallback() {
                 @Override
                 public void OnSuccess(List<Pair> pairs) {
                     Handler mHandler = new Handler(Looper.getMainLooper());
@@ -122,6 +120,7 @@ public class HomeFragment extends Fragment {
                                     saturdayRecyclerView.setAdapter(dayAdapter);
                                 }
                             }
+                            progressBar.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -130,5 +129,6 @@ public class HomeFragment extends Fragment {
         catch(Exception e){
             Log.d("GGGGG", e.getMessage());
         }
+        progressBar.setVisibility(View.VISIBLE);
     }
 }

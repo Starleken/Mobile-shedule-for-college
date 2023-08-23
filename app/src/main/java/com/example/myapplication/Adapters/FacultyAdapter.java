@@ -21,9 +21,9 @@ public class FacultyAdapter extends RecyclerView.Adapter<FacultyAdapter.FacultyV
     private List<Faculty> faculties;
     private Context context;
     private CourseAdapter.OnCourseClickListener clickListener;
-    private Course selectedCourse;
+    private int selectedCourse;
 
-    public FacultyAdapter(List<Faculty> faculties, Context context, Course course, CourseAdapter.OnCourseClickListener listener){
+    public FacultyAdapter(List<Faculty> faculties, Context context, int course, CourseAdapter.OnCourseClickListener listener){
         this.faculties = faculties;
         this.context = context;
         this.clickListener = listener;
@@ -44,7 +44,7 @@ public class FacultyAdapter extends RecyclerView.Adapter<FacultyAdapter.FacultyV
 
     @Override
     public void onBindViewHolder(@NonNull FacultyAdapter.FacultyViewHolder holder, int position) {
-        CourseAdapter adapter = new CourseAdapter(faculties.get(position).courses, context, selectedCourse,clickListener);
+        CourseAdapter adapter = new CourseAdapter(faculties.get(position).courses, context, clickListener);
 
         holder.facultyText.setText(faculties.get(position).name);
         holder.coursesRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));

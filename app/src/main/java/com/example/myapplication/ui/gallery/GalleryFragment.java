@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,17 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Adapters.CourseAdapter;
 import com.example.myapplication.Adapters.FacultyAdapter;
 import com.example.myapplication.Adapters.GroupAdapter;
-import com.example.myapplication.Adapters.LessonAdapter;
 import com.example.myapplication.HTTPRequests.CollegeGetter;
 import com.example.myapplication.Interfaces.CollegeCallback;
 import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.College;
 import com.example.myapplication.Models.Course;
-import com.example.myapplication.Models.Faculty;
 import com.example.myapplication.TestGetGroup;
 import com.example.myapplication.databinding.FragmentGalleryBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryFragment extends Fragment {
@@ -60,27 +56,21 @@ public class GalleryFragment extends Fragment {
     }
 
     private void setFaculties(){
-        TestGetGroup.course = new Course();
-        TestGetGroup.course.id = 4;
+        TestGetGroup getGroup = new TestGetGroup();
+        getGroup.LoadData(getContext());
 
-        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
 
-        GroupAdapter.OnGroupClickListener groupClickListener = new GroupAdapter.OnGroupClickListener() {
-            @Override
-            public void OnGroupClick(Group group) {
-                TestGetGroup.group = group;
-            }
-        };
         CourseAdapter.OnCourseClickListener courseClickListener = new CourseAdapter.OnCourseClickListener() {
             @Override
             public void onCourseClick(Course course) {
-                TestGetGroup.course = course;
-                ((FacultyAdapter)facultyRecyclerView.getAdapter()).UpdateData();
+                if (TestGetGroup.selectedCourseId != course.id){
+                    getGroup.SaveGroup(-1, getContext());
+                }
+                getGroup.SaveCourse(course.id, getContext());
 
-                groupRecyclerView.setLayoutManager(horizontalLayoutManager);
-                GroupAdapter groupAdapter = new GroupAdapter(course.groups, getContext(), groupClickListener);
-                groupRecyclerView.setAdapter(groupAdapter);
+                ((FacultyAdapter)facultyRecyclerView.getAdapter()).UpdateData();
+                setGroups(course.groups);
             }
         };
 
@@ -94,7 +84,7 @@ public class GalleryFragment extends Fragment {
                         @Override
                         public void run() {
                             facultyRecyclerView.setLayoutManager(verticalLayoutManager);
-                            FacultyAdapter facultyAdapter = new FacultyAdapter(colleges.get(0).faculties, getContext(), TestGetGroup.course, courseClickListener);
+                            FacultyAdapter facultyAdapter = new FacultyAdapter(colleges.get(0).faculties, getContext(), TestGetGroup.selectedCourseId, courseClickListener);
                             facultyRecyclerView.setAdapter(facultyAdapter);
                         }
                     });
@@ -104,5 +94,20 @@ public class GalleryFragment extends Fragment {
         catch(Exception e){
             Log.d("DDDD", e.getMessage());
         }
+    }
+
+    private void setGroups(List<Group> groups){
+        TestGetGroup getGroup = new TestGetGroup();
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        GroupAdapter.OnGroupClickListener groupClickListener = new GroupAdapter.OnGroupClickListener() {
+            @Override
+            public void OnGroupClick(Group group) {
+                getGroup.SaveGroup(group.id, getContext());
+            }
+        };
+
+        groupRecyclerView.setLayoutManager(horizontalLayoutManager);
+        GroupAdapter groupAdapter = new GroupAdapter(groups, getContext(), groupClickListener);
+        groupRecyclerView.setAdapter(groupAdapter);
     }
 }

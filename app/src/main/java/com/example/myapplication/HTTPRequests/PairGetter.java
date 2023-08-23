@@ -22,12 +22,12 @@ import okhttp3.ResponseBody;
 public class PairGetter {
     final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/pairs?isCurrentDate=1&groupId=";
 
-    public void GetGroupPairs(Group group, PairCallback pairCallback) throws Exception {
+    public void GetGroupPairs(int groupId, PairCallback pairCallback) throws Exception {
         Gson gson = new Gson();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(MessageFormat.format("{0}{1}", URL_TO_READ, group.id))
+                .url(MessageFormat.format("{0}{1}", URL_TO_READ, groupId))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
