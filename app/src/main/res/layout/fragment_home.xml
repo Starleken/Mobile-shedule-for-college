@@ -33,12 +33,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="30sp"
+                android:textColor="@color/CollegeGreen"
                 android:text="TextView" />
 
             <TextView
                 android:id="@+id/MondayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
                 android:text="Понедельник"
                 android:textSize="34sp" />
 
@@ -51,6 +53,7 @@
                 android:id="@+id/TuesdayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
                 android:text="Вторник" />
 
@@ -63,6 +66,7 @@
                 android:id="@+id/WednesdayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
                 android:text="Среда"
                 android:textSize="34sp" />
 
@@ -75,6 +79,7 @@
                 android:id="@+id/ThursdayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
                 android:text="Четверг" />
 
@@ -87,6 +92,7 @@
                 android:id="@+id/FridayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
                 android:text="Пятница" />
 
@@ -99,6 +105,7 @@
                 android:id="@+id/SaturdayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
                 android:text="Суббота" />
 

@@ -18,7 +18,10 @@ import com.example.myapplication.Adapters.CourseAdapter;
 import com.example.myapplication.Adapters.FacultyAdapter;
 import com.example.myapplication.Adapters.GroupAdapter;
 import com.example.myapplication.HTTPRequests.CollegeGetter;
-import com.example.myapplication.Interfaces.CollegeCallback;
+import com.example.myapplication.HTTPRequests.CourseGetter;
+import com.example.myapplication.HTTPRequests.GroupGetter;
+import com.example.myapplication.Interfaces.ElementCallback;
+import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.College;
 import com.example.myapplication.Models.Course;
@@ -45,6 +48,7 @@ public class GalleryFragment extends Fragment {
         facultyRecyclerView = binding.FacultyRecyclerView;
 
         setFaculties();
+        Log.d("first", "enter1");
 
         return root;
     }
@@ -57,7 +61,6 @@ public class GalleryFragment extends Fragment {
 
     private void setFaculties(){
         TestGetGroup getGroup = new TestGetGroup();
-        getGroup.LoadData(getContext());
 
         LinearLayoutManager verticalLayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -77,9 +80,9 @@ public class GalleryFragment extends Fragment {
         try {
             Handler mHandler = new Handler(Looper.getMainLooper());
             CollegeGetter collegeGetter = new CollegeGetter();
-            collegeGetter.GetAll(new CollegeCallback() {
+            collegeGetter.GetAll(new ListCallback<College>() {
                 @Override
-                public void OnSuccess(List<College> colleges) {
+                public void onSuccess(List<College> colleges) {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -88,6 +91,14 @@ public class GalleryFragment extends Fragment {
                             facultyRecyclerView.setAdapter(facultyAdapter);
                         }
                     });
+                }
+            });
+            CourseGetter courseGetter = new CourseGetter();
+            Log.d("CourseID", Integer.toString(TestGetGroup.selectedCourseId));
+            courseGetter.GetCourseById(TestGetGroup.selectedCourseId, new ElementCallback<Course>() {
+                @Override
+                public void onSuccess(Course result) {
+                    setGroups(result.groups);
                 }
             });
         }
@@ -106,8 +117,16 @@ public class GalleryFragment extends Fragment {
             }
         };
 
-        groupRecyclerView.setLayoutManager(horizontalLayoutManager);
-        GroupAdapter groupAdapter = new GroupAdapter(groups, getContext(), groupClickListener);
-        groupRecyclerView.setAdapter(groupAdapter);
+        Handler mHandler = new Handler(Looper.getMainLooper());
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                groupRecyclerView.setLayoutManager(horizontalLayoutManager);
+                GroupAdapter groupAdapter = new GroupAdapter(groups, getContext(), groupClickListener);
+                groupRecyclerView.setAdapter(groupAdapter);
+            }
+        });
+
+
     }
 }

@@ -19,18 +19,16 @@ public class TestGetGroup {
     public void SaveGroup(int groupId, Context context){
         selectedGroupId = groupId;
 
+        SharedPreferences sharedPref = context.getSharedPreferences(fileKey,Context.MODE_PRIVATE);
 
-//        SharedPreferences sharedPref = context.getSharedPreferences(fileKey,Context.MODE_PRIVATE);
-//
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(groupKey, selectedGroupId);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(groupKey, selectedGroupId);
 
-//        editor.commit();
+        editor.commit();
     }
 
     public void SaveCourse(int courseId, Context context){
         selectedCourseId = courseId;
-
         SharedPreferences sharedPref = context.getSharedPreferences(fileKey,Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPref.edit();

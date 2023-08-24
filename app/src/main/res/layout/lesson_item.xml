@@ -25,8 +25,7 @@
         android:text="11:40-13:10"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintEnd_toStartOf="@+id/LessonName"
         app:layout_constraintStart_toStartOf="@+id/Background"
         app:layout_constraintTop_toTopOf="@+id/Background" />
 
@@ -59,12 +58,23 @@
         android:id="@+id/AudienceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:textColor="@color/black"
+        android:layout_marginTop="5dp"
         android:text="ауд. 43 к. 15"
+        android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/Background"
         app:layout_constraintHorizontal_bias="0.157"
         app:layout_constraintStart_toStartOf="@+id/Background"
-        app:layout_constraintTop_toTopOf="@+id/Background" />
+        app:layout_constraintTop_toBottomOf="@+id/LessonName" />
+
+    <TextView
+        android:id="@+id/DateBetweenText"
+        android:layout_width="157dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="4dp"
+        android:text="05.04.23-03.05.23"
+        app:layout_constraintEnd_toEndOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.655"
+        app:layout_constraintStart_toEndOf="@+id/AudienceText"
+        app:layout_constraintTop_toBottomOf="@+id/LessonName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

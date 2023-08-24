@@ -16,8 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Adapters.LessonAdapter;
+import com.example.myapplication.HTTPRequests.GroupGetter;
 import com.example.myapplication.HTTPRequests.PairGetter;
-import com.example.myapplication.Interfaces.PairCallback;
+import com.example.myapplication.Interfaces.ElementCallback;
+import com.example.myapplication.Interfaces.ListCallback;
+import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.TestGetGroup;
 import com.example.myapplication.databinding.FragmentHomeBinding;
@@ -66,6 +69,7 @@ public class HomeFragment extends Fragment {
 
         progressBar = binding.AwaitProgressBar;
 
+        setGroup();
         SetPairs();
 
         return root;
@@ -80,9 +84,9 @@ public class HomeFragment extends Fragment {
     private void SetPairs(){
         PairGetter getter = new PairGetter();
         try {
-            getter.GetGroupPairs(TestGetGroup.selectedGroupId,new PairCallback() {
+            getter.GetGroupPairs(TestGetGroup.selectedGroupId,new ListCallback<Pair>() {
                 @Override
-                public void OnSuccess(List<Pair> pairs) {
+                public void onSuccess(List<Pair> pairs) {
                     Handler mHandler = new Handler(Looper.getMainLooper());
 
                     HashMap<String, ArrayList<Pair>> dayPairsMap = new HashMap<>();
@@ -130,5 +134,26 @@ public class HomeFragment extends Fragment {
             Log.d("GGGGG", e.getMessage());
         }
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void setGroup(){
+        GroupGetter getter = new GroupGetter();
+        try {
+            getter.GetGroupById(TestGetGroup.selectedGroupId, new ElementCallback<Group>() {
+                @Override
+                public void onSuccess(Group group) {
+                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            binding.ScheduleText.setText(group.name);
+                        }
+                    });
+                }
+            });
+        }
+        catch(Exception e){
+            Log.d("GGGGG", e.getMessage());
+        }
     }
 }

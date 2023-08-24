@@ -2,13 +2,12 @@ package com.example.myapplication.HTTPRequests;
 
 import android.util.Log;
 
-import com.example.myapplication.Interfaces.ListCallback;
-import com.example.myapplication.Models.College;
+import com.example.myapplication.Interfaces.ElementCallback;
+import com.example.myapplication.Models.Audience.Group;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.text.MessageFormat;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -17,15 +16,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class CollegeGetter {
-    final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/colleges/";
+public class GroupGetter {
+    final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/groups";
 
-    public void GetAll(ListCallback<College> callback) throws Exception {
+    public void GetGroupById(int groupId, ElementCallback<Group> groupCallback) throws Exception {
         Gson gson = new Gson();
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(URL_TO_READ)
+                .url(MessageFormat.format("{0}/{1}", URL_TO_READ, groupId))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -41,8 +40,8 @@ public class CollegeGetter {
                         throw new IOException("Запрос к серверу не был успешен: " +
                                 response.code() + " " + response.message());
                     }
-                    List<College> colleges = Arrays.asList(gson.fromJson(responseBody.string(), College[].class));
-                    callback.onSuccess(colleges);
+                    Group group = gson.fromJson(responseBody.string(), Group.class);
+                    groupCallback.onSuccess(group);
                 } catch (Exception e) {
                     Log.d("eeeeeee", e.getMessage());
                 }

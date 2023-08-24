@@ -2,8 +2,7 @@ package com.example.myapplication.HTTPRequests;
 
 import android.util.Log;
 
-import com.example.myapplication.Interfaces.PairCallback;
-import com.example.myapplication.Models.Audience.Group;
+import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Pair;
 import com.google.gson.Gson;
 
@@ -22,7 +21,7 @@ import okhttp3.ResponseBody;
 public class PairGetter {
     final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/pairs?isCurrentDate=1&groupId=";
 
-    public void GetGroupPairs(int groupId, PairCallback pairCallback) throws Exception {
+    public void GetGroupPairs(int groupId, ListCallback<Pair> pairCallback) throws Exception {
         Gson gson = new Gson();
         OkHttpClient client = new OkHttpClient();
 
@@ -44,7 +43,7 @@ public class PairGetter {
                                 response.code() + " " + response.message());
                     }
                     List<Pair> pairs = Arrays.asList(gson.fromJson(responseBody.string(), Pair[].class));
-                    pairCallback.OnSuccess(pairs);
+                    pairCallback.onSuccess(pairs);
                 } catch (Exception e) {
                     Log.d("eeeeeee", e.getMessage());
                 }

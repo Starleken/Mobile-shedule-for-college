@@ -20,7 +20,9 @@ import com.example.myapplication.VerticalTextView;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +45,15 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
     @Override
     public void onBindViewHolder(@NonNull LessonViewHolder holder, int position) {
         Pair pair = pairs.get(position);
+
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yy");
+
         holder.background.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(pair.typeOfPair.color)));
-        holder.lessonName.setText(pair.teacherSubject.Subject.Name);
+        holder.lessonName.setText(pair.teacherSubject.Subject.Name.equals("") ? pair.teacherSubject.Subject.FullName : pair.teacherSubject.Subject.Name);
         holder.teacherName.setText(MessageFormat.format("{0} {1}. {2}.", pair.teacherSubject.Teacher.LastName, pair.teacherSubject.Teacher.Name.charAt(0), pair.teacherSubject.Teacher.Patronymic.charAt(0)));
         holder.audienceText.setText(MessageFormat.format("ауд. {0} к. {1}", pair.audience.name, pair.audience.corpu.name));
         holder.timeText.setText(pair.time.name);
+        holder.dateBetweenText.setText(MessageFormat.format("{0}-{1}", formatter.format(pair.dateStart), formatter.format(pair.dateEnd)));
     }
 
     @Override
@@ -61,6 +67,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         final TextView teacherName;
         final TextView audienceText;
         final VerticalTextView timeText;
+        final TextView dateBetweenText;
 
         public LessonViewHolder(View itemView) {
             super(itemView);
@@ -70,6 +77,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
             teacherName = itemView.findViewById(R.id.TeacherNameTextView);
             audienceText = itemView.findViewById(R.id.AudienceText);
             timeText = itemView.findViewById(R.id.TimeText);
+            dateBetweenText = itemView.findViewById(R.id.DateBetweenText);
         }
     }
 }
