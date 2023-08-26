@@ -11,7 +11,11 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,8 +26,10 @@ import com.example.myapplication.Interfaces.ElementCallback;
 import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Pair;
+import com.example.myapplication.R;
 import com.example.myapplication.TestGetGroup;
 import com.example.myapplication.databinding.FragmentHomeBinding;
+import com.example.myapplication.ui.TeacherFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +88,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void SetPairs(){
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.teacherFragment);
+            }
+        };
+
         PairGetter getter = new PairGetter();
         try {
             getter.GetGroupPairs(TestGetGroup.selectedGroupId,new ListCallback<Pair>() {
@@ -103,7 +116,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void run() {
                             for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
-                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext());
+                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), listener);
 
                                 if (entry.getKey().equals("Понедельник")){
                                     mondayRecyclerView.setAdapter(dayAdapter);

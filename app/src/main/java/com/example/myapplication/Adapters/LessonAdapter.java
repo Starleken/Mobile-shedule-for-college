@@ -29,9 +29,12 @@ import java.util.List;
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonViewHolder> {
     private List<Pair> pairs;
     private Context context;
-    public LessonAdapter(List<Pair> pairs, Context context){
+    private View.OnClickListener clickListener;
+
+    public LessonAdapter(List<Pair> pairs, Context context, View.OnClickListener listener){
         this.pairs = pairs;
         this.context = context;
+        this.clickListener = listener;
     }
 
     @NonNull
@@ -54,6 +57,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         holder.audienceText.setText(MessageFormat.format("ауд. {0} к. {1}", pair.audience.name, pair.audience.corpu.name));
         holder.timeText.setText(pair.time.name);
         holder.dateBetweenText.setText(MessageFormat.format("{0}-{1}", formatter.format(pair.dateStart), formatter.format(pair.dateEnd)));
+        holder.teacherName.setOnClickListener(clickListener);
     }
 
     @Override
@@ -77,7 +81,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
             teacherName = itemView.findViewById(R.id.TeacherNameTextView);
             audienceText = itemView.findViewById(R.id.AudienceText);
             timeText = itemView.findViewById(R.id.TimeText);
-            dateBetweenText = itemView.findViewById(R.id.DateBetweenText);
+            dateBetweenText = itemView.findViewById(R.id.DateBetweenText);;
         }
     }
 }
