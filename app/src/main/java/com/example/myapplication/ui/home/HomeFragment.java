@@ -26,6 +26,7 @@ import com.example.myapplication.Interfaces.ElementCallback;
 import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Pair;
+import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
 import com.example.myapplication.TestGetGroup;
 import com.example.myapplication.databinding.FragmentHomeBinding;
@@ -88,10 +89,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void SetPairs(){
-        View.OnClickListener listener = new View.OnClickListener() {
+        LessonAdapter.OnTeacherClickListener listener = new LessonAdapter.OnTeacherClickListener() {
             @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.teacherFragment);
+            public void onTeacherClick(Teacher teacher) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Teacher", teacher);
+                Navigation.findNavController(getView()).navigate(R.id.teacherFragment, bundle);
             }
         };
 

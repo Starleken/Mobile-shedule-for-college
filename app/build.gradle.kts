@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.okhttp3)
     implementation(libs.gson)
+    implementation(libs.picasso)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

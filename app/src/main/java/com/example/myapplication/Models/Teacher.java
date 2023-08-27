@@ -1,8 +1,15 @@
 package com.example.myapplication.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class Teacher {
+
+public class Teacher implements Serializable {
     public int id;
     public String Name;
     public String LastName;

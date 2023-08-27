@@ -47,7 +47,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/MondayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/TuesdayText"
@@ -60,7 +61,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TuesdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/WednesdayText"
@@ -73,7 +75,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/WednesdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/ThursdayText"
@@ -86,7 +89,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ThursdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/FridayText"
@@ -99,7 +103,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/FridayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/SaturdayText"
@@ -112,7 +117,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/SaturdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
         </LinearLayout>
     </ScrollView>
 

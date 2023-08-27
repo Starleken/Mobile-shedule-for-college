@@ -29,15 +29,18 @@
 
             <ImageView
                 android:id="@+id/TeacherImage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_width="361dp"
+                android:layout_height="251dp"
+                android:layout_gravity="center_horizontal"/>
 
             <TextView
                 android:id="@+id/TeacherName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="30sp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="25sp"
                 android:textColor="@color/CollegeGreen"
                 android:text="TextView" />
 
@@ -52,7 +55,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TeacherMondayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/TeacherTuesdayText"
@@ -65,7 +69,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TeacherTuesdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/TeacherWednesdayText"
@@ -78,7 +83,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TeacherWednesdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/TeacherThursdayText"
@@ -91,7 +97,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TeacherThursdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/TeacherFridayText"
@@ -104,7 +111,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TeacherFridayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
             <TextView
                 android:id="@+id/TeacherSaturdayText"
@@ -117,7 +125,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/TeacherSaturdayRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
