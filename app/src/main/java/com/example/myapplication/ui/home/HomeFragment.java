@@ -7,9 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,6 +26,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Adapters.LessonAdapter;
+import com.example.myapplication.Adapters.SearchableAdapter;
+import com.example.myapplication.Cache;
 import com.example.myapplication.HTTPRequests.GroupGetter;
 import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.Interfaces.ElementCallback;
@@ -48,6 +56,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView saturdayRecyclerView;
     private ProgressBar progressBar;
 
+    private AutoCompleteTextView searchTextView;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -75,6 +85,24 @@ public class HomeFragment extends Fragment {
         saturdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         progressBar = binding.AwaitProgressBar;
+
+        searchTextView = binding.autoCompleteTextView;
+
+        try {
+            SearchableAdapter adapter = new SearchableAdapter(Cache.teachers, getContext());
+            searchTextView.setAdapter(adapter);
+            searchTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Teacher", adapter.getItem(i));
+                    Navigation.findNavController(getView()).navigate(R.id.teacherFragment, bundle);
+                }
+            });
+        }
+        catch(Exception e){
+            Log.d("1111111111",e.getMessage());
+        }
 
         setGroup();
         SetPairs();
@@ -140,6 +168,8 @@ public class HomeFragment extends Fragment {
                                     saturdayRecyclerView.setAdapter(dayAdapter);
                                 }
                             }
+                            searchTextView.setText(null);
+
                             progressBar.setVisibility(View.GONE);
                         }
                     });

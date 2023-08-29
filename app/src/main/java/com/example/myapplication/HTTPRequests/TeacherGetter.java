@@ -2,11 +2,15 @@ package com.example.myapplication.HTTPRequests;
 
 import android.util.Log;
 
+import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Study;
 import com.example.myapplication.Models.Teacher;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.sql.Array;
+import java.util.Arrays;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -16,9 +20,9 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class TeacherGetter {
-    final private String URL_TO_READ = "http://10.0.2.2:5002/api/v1/teachers";
+    final private String URL_TO_READ = "http://185.250.44.61:5002/api/v1/teachers";
 
-    public void GetAll() throws Exception{
+    public void GetAll(ListCallback<Teacher> callback) throws Exception{
         Gson gson = new Gson();
         OkHttpClient client = new OkHttpClient();
 
@@ -39,7 +43,8 @@ public class TeacherGetter {
                         throw new IOException("Запрос к серверу не был успешен: " +
                                 response.code() + " " + response.message());
                     }
-                    Teacher teacher = gson.fromJson(responseBody.string(), Teacher.class);
+                    List<Teacher> teacher = Arrays.asList(gson.fromJson(responseBody.string(), Teacher[].class));
+                    callback.onSuccess(teacher);
                 }
                 catch(Exception e){
                     Log.d("eeeeeee", e.getMessage());

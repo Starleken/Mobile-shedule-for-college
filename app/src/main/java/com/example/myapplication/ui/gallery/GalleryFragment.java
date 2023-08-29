@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Adapters.CourseAdapter;
 import com.example.myapplication.Adapters.FacultyAdapter;
 import com.example.myapplication.Adapters.GroupAdapter;
+import com.example.myapplication.Cache;
 import com.example.myapplication.HTTPRequests.CollegeGetter;
 import com.example.myapplication.HTTPRequests.CourseGetter;
 import com.example.myapplication.HTTPRequests.GroupGetter;
@@ -48,7 +49,6 @@ public class GalleryFragment extends Fragment {
         facultyRecyclerView = binding.FacultyRecyclerView;
 
         setFaculties();
-        Log.d("first", "enter1");
 
         return root;
     }
@@ -79,28 +79,26 @@ public class GalleryFragment extends Fragment {
 
         try {
             Handler mHandler = new Handler(Looper.getMainLooper());
-            CollegeGetter collegeGetter = new CollegeGetter();
-            collegeGetter.GetAll(new ListCallback<College>() {
-                @Override
-                public void onSuccess(List<College> colleges) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            facultyRecyclerView.setLayoutManager(verticalLayoutManager);
-                            FacultyAdapter facultyAdapter = new FacultyAdapter(colleges.get(0).faculties, getContext(), TestGetGroup.selectedCourseId, courseClickListener);
+
+            facultyRecyclerView.setLayoutManager(verticalLayoutManager);
+                            FacultyAdapter facultyAdapter = new FacultyAdapter(Cache.colleges.get(0).faculties, getContext(), TestGetGroup.selectedCourseId, courseClickListener);
                             facultyRecyclerView.setAdapter(facultyAdapter);
-                        }
-                    });
-                }
-            });
-            CourseGetter courseGetter = new CourseGetter();
-            Log.d("CourseID", Integer.toString(TestGetGroup.selectedCourseId));
-            courseGetter.GetCourseById(TestGetGroup.selectedCourseId, new ElementCallback<Course>() {
-                @Override
-                public void onSuccess(Course result) {
-                    setGroups(result.groups);
-                }
-            });
+
+//            CollegeGetter collegeGetter = new CollegeGetter();
+//            collegeGetter.GetAll(new ListCallback<College>() {
+//                @Override
+//                public void onSuccess(List<College> colleges) {
+//                    mHandler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            facultyRecyclerView.setLayoutManager(verticalLayoutManager);
+//                            FacultyAdapter facultyAdapter = new FacultyAdapter(colleges.get(0).faculties, getContext(), TestGetGroup.selectedCourseId, courseClickListener);
+//                            facultyRecyclerView.setAdapter(facultyAdapter);
+//                        }
+//                    });
+//                }
+//            });
+            setGroups(Cache.courses.stream().filter(course -> course.id == TestGetGroup.selectedCourseId).findFirst().get().groups);
         }
         catch(Exception e){
             Log.d("DDDD", e.getMessage());

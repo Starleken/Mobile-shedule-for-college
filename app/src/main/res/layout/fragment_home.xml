@@ -25,7 +25,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
             android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/autoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_marginEnd="50sp"
+                android:layout_marginStart="10sp"
+                android:paddingStart="10sp"
+                android:background="@drawable/corner"
+                android:backgroundTint="@color/SettingsButton"
+                android:layout_height="wrap_content"
+                android:hint="Поиск"
+                android:completionThreshold="1" />
 
             <TextView
                 android:id="@+id/ScheduleText"

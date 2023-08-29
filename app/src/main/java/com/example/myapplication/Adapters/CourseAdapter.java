@@ -45,7 +45,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         Course course = courses.get(position);
         holder.groupText.setText(Integer.toString(course.name));
         int colorId = TestGetGroup.selectedCourseId ==  courses.get(position).id ? R.color.CollegeGreen : R.color.purple_500;
-        holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, colorId));
+
+        if (TestGetGroup.selectedCourseId ==  courses.get(position).id){
+            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.CollegeGreen));
+            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.white));
+        }
+        else{
+            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context,  R.color.purple_500));
+            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.black));
+        }
     }
 
     @Override

@@ -6,7 +6,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
+import com.example.myapplication.HTTPRequests.CollegeGetter;
+import com.example.myapplication.HTTPRequests.CourseGetter;
 import com.example.myapplication.HTTPRequests.StudyGetter;
+import com.example.myapplication.HTTPRequests.TeacherGetter;
+import com.example.myapplication.Interfaces.ListCallback;
+import com.example.myapplication.Models.College;
+import com.example.myapplication.Models.Course;
+import com.example.myapplication.Models.Teacher;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -19,6 +26,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.databinding.ActivityMainBinding;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         TestGetGroup getGroup = new TestGetGroup();
         getGroup.LoadData(this);
+
+        getCache();
     }
 
     @Override
@@ -70,5 +81,35 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void getCache(){
+        CollegeGetter collegeGetter = new CollegeGetter();
+        try {
+            collegeGetter.GetAll(new ListCallback<College>() {
+                @Override
+                public void onSuccess(List<College> result) {
+                    Cache.colleges = result;
+                }
+            });
+            CourseGetter courseGetter = new CourseGetter();
+            courseGetter.GetAll(new ListCallback<Course>() {
+                @Override
+                public void onSuccess(List<Course> result) {
+                    Cache.courses = result;
+                }
+            });
+            TeacherGetter getter = new TeacherGetter();
+            getter.GetAll(new ListCallback<Teacher>() {
+                @Override
+                public void onSuccess(List<Teacher> result) {
+                    Cache.teachers = result;
+                }
+            });
+        }
+        catch(Exception e){
+            Log.d("11111", e.getMessage());
+        }
+
     }
 }
