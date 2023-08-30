@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,10 +105,17 @@ public class HomeFragment extends Fragment {
             Log.d("1111111111",e.getMessage());
         }
 
-        setGroup();
-        SetPairs();
+
 
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setGroup();
+        SetPairs();
     }
 
     @Override
@@ -128,6 +136,7 @@ public class HomeFragment extends Fragment {
 
         PairGetter getter = new PairGetter();
         try {
+            setLoadUI();
             getter.GetGroupPairs(TestGetGroup.selectedGroupId,new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> pairs) {
@@ -170,7 +179,7 @@ public class HomeFragment extends Fragment {
                             }
                             searchTextView.setText(null);
 
-                            progressBar.setVisibility(View.GONE);
+                            onDataUILoaded();
                         }
                     });
                 }
@@ -179,7 +188,6 @@ public class HomeFragment extends Fragment {
         catch(Exception e){
             Log.d("GGGGG", e.getMessage());
         }
-        progressBar.setVisibility(View.VISIBLE);
     }
 
     private void setGroup(){
@@ -201,5 +209,35 @@ public class HomeFragment extends Fragment {
         catch(Exception e){
             Log.d("GGGGG", e.getMessage());
         }
+    }
+
+    private void setLoadUI(){
+        binding.ScheduleText.setVisibility(View.GONE);
+        binding.MondayText.setVisibility(View.GONE);
+        binding.TuesdayText.setVisibility(View.GONE);
+        binding.WednesdayText.setVisibility(View.GONE);
+        binding.ThursdayText.setVisibility(View.GONE);
+        binding.FridayText.setVisibility(View.GONE);
+        binding.SaturdayText.setVisibility(View.GONE);
+        binding.autoCompleteTextView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void onDataUILoaded(){
+        try {
+            binding.ScheduleText.setVisibility(View.VISIBLE);
+            binding.MondayText.setVisibility(View.VISIBLE);
+            binding.TuesdayText.setVisibility(View.VISIBLE);
+            binding.WednesdayText.setVisibility(View.VISIBLE);
+            binding.ThursdayText.setVisibility(View.VISIBLE);
+            binding.FridayText.setVisibility(View.VISIBLE);
+            binding.SaturdayText.setVisibility(View.VISIBLE);
+            binding.autoCompleteTextView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
+        catch(Exception e){
+            Log.d("1412412", e.getMessage());
+        }
+
     }
 }
