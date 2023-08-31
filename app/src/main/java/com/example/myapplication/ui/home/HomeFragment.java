@@ -49,12 +49,11 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private RecyclerView mondayRecyclerView;
-    private RecyclerView tuesdayRecyclerView;
-    private RecyclerView wednesdayRecyclerView;
-    private RecyclerView thursdayRecyclerView;
-    private RecyclerView fridayRecyclerView;
-    private RecyclerView saturdayRecyclerView;
+
+    private View[] viewsToHide;
+
+    private HashMap<String, RecyclerView> recyclerViewHashMap;
+
     private ProgressBar progressBar;
 
     private AutoCompleteTextView searchTextView;
@@ -67,23 +66,20 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        mondayRecyclerView = binding.MondayRecyclerView;
-        mondayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setViewsToHide();
 
-        tuesdayRecyclerView = binding.TuesdayRecyclerView;
-        tuesdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewHashMap = new HashMap<String, RecyclerView>();
 
-        wednesdayRecyclerView = binding.WednesdayRecyclerView;
-        wednesdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewHashMap.put("Понедельник", binding.MondayRecyclerView);
+        recyclerViewHashMap.put("Вторник", binding.TuesdayRecyclerView);
+        recyclerViewHashMap.put("Среда", binding.WednesdayRecyclerView);
+        recyclerViewHashMap.put("Четверг", binding.ThursdayRecyclerView);
+        recyclerViewHashMap.put("Пятница", binding.FridayRecyclerView);
+        recyclerViewHashMap.put("Суббота", binding.SaturdayRecyclerView);
 
-        thursdayRecyclerView = binding.ThursdayRecyclerView;
-        thursdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        fridayRecyclerView = binding.FridayRecyclerView;
-        fridayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        saturdayRecyclerView = binding.SaturdayRecyclerView;
-        saturdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        for (RecyclerView recyclerView : recyclerViewHashMap.values()){
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
 
         progressBar = binding.AwaitProgressBar;
 
@@ -104,8 +100,6 @@ public class HomeFragment extends Fragment {
         catch(Exception e){
             Log.d("1111111111",e.getMessage());
         }
-
-
 
         return root;
     }
@@ -158,24 +152,7 @@ public class HomeFragment extends Fragment {
                             for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
                                 LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), listener);
 
-                                if (entry.getKey().equals("Понедельник")){
-                                    mondayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Вторник")){
-                                    tuesdayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Среда")){
-                                    wednesdayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Четверг")){
-                                    thursdayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Пятница")){
-                                    fridayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Суббота")){
-                                    saturdayRecyclerView.setAdapter(dayAdapter);
-                                }
+                                recyclerViewHashMap.get(entry.getKey()).setAdapter(dayAdapter);
                             }
                             searchTextView.setText(null);
 
@@ -212,32 +189,31 @@ public class HomeFragment extends Fragment {
     }
 
     private void setLoadUI(){
-        binding.ScheduleText.setVisibility(View.GONE);
-        binding.MondayText.setVisibility(View.GONE);
-        binding.TuesdayText.setVisibility(View.GONE);
-        binding.WednesdayText.setVisibility(View.GONE);
-        binding.ThursdayText.setVisibility(View.GONE);
-        binding.FridayText.setVisibility(View.GONE);
-        binding.SaturdayText.setVisibility(View.GONE);
-        binding.autoCompleteTextView.setVisibility(View.GONE);
+        for (View view : viewsToHide){
+            view.setVisibility(View.GONE);
+        }
+
         progressBar.setVisibility(View.VISIBLE);
     }
 
     private void onDataUILoaded(){
-        try {
-            binding.ScheduleText.setVisibility(View.VISIBLE);
-            binding.MondayText.setVisibility(View.VISIBLE);
-            binding.TuesdayText.setVisibility(View.VISIBLE);
-            binding.WednesdayText.setVisibility(View.VISIBLE);
-            binding.ThursdayText.setVisibility(View.VISIBLE);
-            binding.FridayText.setVisibility(View.VISIBLE);
-            binding.SaturdayText.setVisibility(View.VISIBLE);
-            binding.autoCompleteTextView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
-        }
-        catch(Exception e){
-            Log.d("1412412", e.getMessage());
+        for (View view : viewsToHide){
+                view.setVisibility(View.VISIBLE);
         }
 
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void setViewsToHide(){
+        viewsToHide = new View[]{
+                binding.ScheduleText,
+                binding.MondayText,
+                binding.TuesdayText,
+                binding.WednesdayText,
+                binding.ThursdayText,
+                binding.FridayText,
+                binding.SaturdayText,
+                binding.autoCompleteTextView
+        };
     }
 }

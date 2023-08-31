@@ -27,7 +27,8 @@
         android:text="11:40-13:10"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/LessonName"
+        app:layout_constraintEnd_toEndOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.027"
         app:layout_constraintStart_toStartOf="@+id/Background"
         app:layout_constraintTop_toTopOf="@+id/Background" />
 
@@ -38,8 +39,8 @@
         android:text="Базуев В.М"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.303"
+        app:layout_constraintStart_toEndOf="@+id/TimeText"
         app:layout_constraintTop_toTopOf="@+id/Background" />
 
     <TextView
@@ -52,20 +53,20 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintHorizontal_bias="0.345"
-        app:layout_constraintStart_toStartOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.119"
+        app:layout_constraintStart_toEndOf="@+id/TimeText"
         app:layout_constraintTop_toTopOf="@+id/Background" />
 
     <TextView
         android:id="@+id/AudienceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="4dp"
         android:text="ауд. 43 к. 15"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintHorizontal_bias="0.157"
-        app:layout_constraintStart_toStartOf="@+id/Background"
+        app:layout_constraintHorizontal_bias="0.036"
+        app:layout_constraintStart_toEndOf="@+id/TimeText"
         app:layout_constraintTop_toBottomOf="@+id/LessonName" />
 
     <TextView
@@ -75,7 +76,7 @@
         android:layout_marginTop="4dp"
         android:text="05.04.23-03.05.23"
         app:layout_constraintEnd_toEndOf="@+id/Background"
-        app:layout_constraintHorizontal_bias="0.655"
+        app:layout_constraintHorizontal_bias="0.568"
         app:layout_constraintStart_toEndOf="@+id/AudienceText"
         app:layout_constraintTop_toBottomOf="@+id/LessonName" />
 

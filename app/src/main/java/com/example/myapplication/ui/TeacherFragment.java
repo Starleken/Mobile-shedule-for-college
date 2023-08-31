@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.myapplication.Adapters.LessonAdapter;
@@ -36,17 +37,16 @@ import java.util.stream.Collectors;
 public class TeacherFragment extends Fragment {
 
     private FragmentTeacherBinding binding;
+
+    private View[] viewsToHide;
+    private ProgressBar progressBar;
+
     private Teacher teacher;
 
     private ImageView teacherImage;
     private TextView teacherName;
 
-    private RecyclerView mondayRecyclerView;
-    private RecyclerView tuesdayRecyclerView;
-    private RecyclerView wednesdayRecyclerView;
-    private RecyclerView thursdayRecyclerView;
-    private RecyclerView fridayRecyclerView;
-    private RecyclerView saturdayRecyclerView;
+    private HashMap<String, RecyclerView> recyclerViewHashMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,23 +69,20 @@ public class TeacherFragment extends Fragment {
         teacherImage = binding.TeacherImage;
         teacherName = binding.TeacherName;
 
-        mondayRecyclerView = binding.TeacherMondayRecyclerView;
-        mondayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setViewsToHide();
+        progressBar = binding.AwaitProgressBar;
 
-        tuesdayRecyclerView = binding.TeacherTuesdayRecyclerView;
-        tuesdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewHashMap = new HashMap<String, RecyclerView>();
+        recyclerViewHashMap.put("Понедельник", binding.TeacherMondayRecyclerView);
+        recyclerViewHashMap.put("Вторник", binding.TeacherTuesdayRecyclerView);
+        recyclerViewHashMap.put("Среда", binding.TeacherWednesdayRecyclerView);
+        recyclerViewHashMap.put("Четверг", binding.TeacherThursdayRecyclerView);
+        recyclerViewHashMap.put("Пятница", binding.TeacherFridayRecyclerView);
+        recyclerViewHashMap.put("Суббота", binding.TeacherSaturdayRecyclerView);
 
-        wednesdayRecyclerView = binding.TeacherWednesdayRecyclerView;
-        wednesdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        thursdayRecyclerView = binding.TeacherThursdayRecyclerView;
-        thursdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        fridayRecyclerView = binding.TeacherFridayRecyclerView;
-        fridayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        saturdayRecyclerView = binding.TeacherSaturdayRecyclerView;
-        saturdayRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        for (RecyclerView recyclerView : recyclerViewHashMap.values()){
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
 
         teacherName.setText(MessageFormat.format("{0} {1} {2}", teacher.LastName, teacher.Name , teacher.Patronymic));
 
@@ -98,7 +95,7 @@ public class TeacherFragment extends Fragment {
         PairGetter getter = new PairGetter();
 
         try {
-            Picasso.get().load(MessageFormat.format("http://185.250.44.61:5002/avatars/{0}", teacher.Image)).into(teacherImage);
+            Picasso.get().load(MessageFormat.format("http://185.250.44.61:5002/avatars/{0}", teacher.Image)).error(R.drawable.teacher_photo).into(teacherImage);
             getter.GetAllPairs(new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> result) {
@@ -122,33 +119,44 @@ public class TeacherFragment extends Fragment {
                             for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
                                 LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), null);
 
-                                if (entry.getKey().equals("Понедельник")){
-                                    mondayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Вторник")){
-                                    tuesdayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Среда")){
-                                    wednesdayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Четверг")){
-                                    thursdayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Пятница")){
-                                    fridayRecyclerView.setAdapter(dayAdapter);
-                                }
-                                else if(entry.getKey().equals("Суббота")){
-                                    saturdayRecyclerView.setAdapter(dayAdapter);
-                                }
+                                recyclerViewHashMap.get(entry.getKey()).setAdapter(dayAdapter);
                             }
+                            onDataUILoaded();
                         }
                     });
                 }
             });
+            setLoadUI();
         }
         catch(Exception e){
             Log.d("11111", e.getMessage());
         }
+    }
 
+    private void setLoadUI(){
+        for (View view : viewsToHide){
+            view.setVisibility(View.GONE);
+        }
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void onDataUILoaded(){
+        for (View view : viewsToHide){
+            view.setVisibility(View.VISIBLE);
+        }
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private void setViewsToHide(){
+        viewsToHide = new View[]{
+                binding.TeacherImage,
+                binding.TeacherName,
+                binding.TeacherMondayText,
+                binding.TeacherTuesdayText,
+                binding.TeacherWednesdayText,
+                binding.TeacherThursdayText,
+                binding.TeacherFridayText,
+                binding.TeacherSaturdayText
+        };
     }
 }

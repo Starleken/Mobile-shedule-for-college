@@ -63,12 +63,15 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         holder.audienceText.setText(MessageFormat.format("ауд. {0} к. {1}", pair.audience.name, pair.audience.corpu.name));
         holder.timeText.setText(pair.time.name);
         holder.dateBetweenText.setText(MessageFormat.format("{0}-{1}", formatter.format(pair.dateStart), formatter.format(pair.dateEnd)));
-        holder.teacherName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                teacherClickListener.onTeacherClick(pair.teacherSubject.Teacher);
-            }
-        });
+
+        if (teacherClickListener != null){
+            holder.teacherName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    teacherClickListener.onTeacherClick(pair.teacherSubject.Teacher);
+                }
+            });
+        }
     }
 
     @Override

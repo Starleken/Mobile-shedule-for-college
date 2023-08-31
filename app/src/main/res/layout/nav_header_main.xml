@@ -18,5 +18,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:layout_marginTop="10sp"
         app:srcCompat="@drawable/schedule_logo" />
 </LinearLayout>
