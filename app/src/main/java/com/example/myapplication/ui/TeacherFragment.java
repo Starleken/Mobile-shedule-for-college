@@ -23,7 +23,6 @@ import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
-import com.example.myapplication.databinding.FragmentHomeBinding;
 import com.example.myapplication.databinding.FragmentTeacherBinding;
 import com.squareup.picasso.Picasso;
 

@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/SheduleRelativeLayout"
+    android:background="@color/background_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.ScheduleFragment">
 
     <ProgressBar
         android:id="@+id/AwaitProgressBar"
@@ -53,6 +54,7 @@
                 android:id="@+id/MondayText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10sp"
                 android:textColor="@color/CollegeGreen"
                 android:text="Понедельник"
                 android:textSize="34sp" />
@@ -65,6 +67,7 @@
 
             <TextView
                 android:id="@+id/TuesdayText"
+                android:layout_marginStart="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
@@ -79,6 +82,7 @@
 
             <TextView
                 android:id="@+id/WednesdayText"
+                android:layout_marginStart="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
@@ -94,6 +98,7 @@
             <TextView
                 android:id="@+id/ThursdayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
@@ -108,6 +113,7 @@
             <TextView
                 android:id="@+id/FridayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
@@ -122,6 +128,7 @@
             <TextView
                 android:id="@+id/SaturdayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"

@@ -45,12 +45,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         holder.groupText.setText(group.name);
 
         if (TestGetGroup.selectedGroupId ==  groups.get(position).id){
-            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.CollegeGreen));
-            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.white));
+            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.settings_active_button));
+            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.settings_active_text));
         }
         else{
-            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context,  R.color.purple_500));
-            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.black));
+            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context,  R.color.settings_inactive_button));
+            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.settings_inactive_text));
         }
 
     }

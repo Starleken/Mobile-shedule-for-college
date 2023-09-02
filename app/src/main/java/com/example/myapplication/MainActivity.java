@@ -1,14 +1,12 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
 import com.example.myapplication.HTTPRequests.CollegeGetter;
 import com.example.myapplication.HTTPRequests.CourseGetter;
-import com.example.myapplication.HTTPRequests.StudyGetter;
 import com.example.myapplication.HTTPRequests.TeacherGetter;
 import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.College;
@@ -41,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); //Отключить автоматическую тёмную тему
-
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_schedule, R.id.nav_settings, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

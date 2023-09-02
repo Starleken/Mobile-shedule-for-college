@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.TeacherFragment">
 
@@ -29,6 +30,7 @@
             <ImageView
                 android:id="@+id/TeacherImage"
                 android:background="@drawable/corner"
+                android:backgroundTint="@color/background_color"
                 android:layout_width="361dp"
                 android:layout_height="251dp"
                 android:layout_marginTop="10sp"
@@ -48,6 +50,7 @@
             <TextView
                 android:id="@+id/TeacherMondayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:text="Понедельник"
@@ -62,6 +65,7 @@
             <TextView
                 android:id="@+id/TeacherTuesdayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
@@ -76,6 +80,7 @@
             <TextView
                 android:id="@+id/TeacherWednesdayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:text="Среда"
@@ -90,6 +95,7 @@
             <TextView
                 android:id="@+id/TeacherThursdayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
@@ -104,6 +110,7 @@
             <TextView
                 android:id="@+id/TeacherFridayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"
@@ -118,6 +125,7 @@
             <TextView
                 android:id="@+id/TeacherSaturdayText"
                 android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/CollegeGreen"
                 android:textSize="34sp"

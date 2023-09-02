@@ -8,10 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="settings_pannel">#FFFFFF</color>
+    <color name="background_color">#F5F5F5</color>
     <color name="CollegeGreen">#024E39</color>
-    <color name="WhiteTextOnGreen">#E2E2E2</color>
-
     <color name="LectureLessonColor">#CFFDB3</color>
-
     <color name="SettingsButton">#E2E2E2</color>
+
+    <color name="settings_active_button">#024E39</color>
+    <color name="settings_active_text">#E2E2E2</color>
+    <color name="settings_inactive_text">#595959</color>
+    <color name="settings_inactive_button">#E2E2E2</color>
 </resources>

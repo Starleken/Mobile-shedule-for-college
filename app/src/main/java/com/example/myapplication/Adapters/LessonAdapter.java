@@ -3,7 +3,9 @@ package com.example.myapplication.Adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,7 +60,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
 
         DateFormat formatter = new SimpleDateFormat("dd.MM.yy");
 
-        holder.background.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(pair.typeOfPair.color)));
+        String colorString = getColorStringByTheme(pair);
+        holder.background.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(colorString)));
         holder.lessonName.setText(pair.teacherSubject.Subject.Name.equals("") ? pair.teacherSubject.Subject.FullName : pair.teacherSubject.Subject.Name);
         holder.teacherName.setText(MessageFormat.format("{0} {1}. {2}.", pair.teacherSubject.Teacher.LastName, pair.teacherSubject.Teacher.Name.charAt(0), pair.teacherSubject.Teacher.Patronymic.charAt(0)));
         holder.audienceText.setText(MessageFormat.format("ауд. {0} к. {1}", pair.audience.name, pair.audience.corpu.name));
@@ -77,6 +81,15 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
     @Override
     public int getItemCount() {
         return pairs.size();
+    }
+
+    private String getColorStringByTheme(Pair pair){
+        int nightModeFlags =  context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES){
+            return MessageFormat.format("#BF{0}", pair.typeOfPair.color.substring(1));
+        }
+        else return pair.typeOfPair.color;
     }
 
     public static class LessonViewHolder extends RecyclerView.ViewHolder {

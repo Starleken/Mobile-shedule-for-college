@@ -44,15 +44,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     public void onBindViewHolder(@NonNull CourseAdapter.CourseViewHolder holder, int position) {
         Course course = courses.get(position);
         holder.groupText.setText(Integer.toString(course.name));
-        int colorId = TestGetGroup.selectedCourseId ==  courses.get(position).id ? R.color.CollegeGreen : R.color.purple_500;
 
         if (TestGetGroup.selectedCourseId ==  courses.get(position).id){
-            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.CollegeGreen));
-            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.white));
+            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.settings_active_button));
+            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.settings_active_text));
         }
         else{
-            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context,  R.color.purple_500));
-            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.black));
+            holder.background.setBackgroundTintList(ContextCompat.getColorStateList(context,  R.color.settings_inactive_button));
+            holder.groupText.setTextColor(ContextCompat.getColor(context, R.color.settings_inactive_text));
         }
     }
 

@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,32 +21,27 @@ import com.example.myapplication.Adapters.CourseAdapter;
 import com.example.myapplication.Adapters.FacultyAdapter;
 import com.example.myapplication.Adapters.GroupAdapter;
 import com.example.myapplication.Cache;
-import com.example.myapplication.HTTPRequests.CollegeGetter;
-import com.example.myapplication.HTTPRequests.CourseGetter;
-import com.example.myapplication.HTTPRequests.GroupGetter;
-import com.example.myapplication.Interfaces.ElementCallback;
-import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Audience.Group;
-import com.example.myapplication.Models.College;
 import com.example.myapplication.Models.Course;
 import com.example.myapplication.TestGetGroup;
-import com.example.myapplication.databinding.FragmentGalleryBinding;
+import com.example.myapplication.databinding.FragmentSettingsBinding;
 
 import java.util.List;
 
-public class GalleryFragment extends Fragment {
+public class SettingsFragment extends Fragment {
     private RecyclerView groupRecyclerView;
     private RecyclerView facultyRecyclerView;
-
-    private FragmentGalleryBinding binding;
+    private FragmentSettingsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         GalleryViewModel galleryViewModel =
                 new ViewModelProvider(this).get(GalleryViewModel.class);
 
-        binding = FragmentGalleryBinding.inflate(inflater, container, false);
+        binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        SettingSwitch();
 
         groupRecyclerView = binding.GroupRecyclerView;
         facultyRecyclerView = binding.FacultyRecyclerView;
@@ -84,20 +82,6 @@ public class GalleryFragment extends Fragment {
                             FacultyAdapter facultyAdapter = new FacultyAdapter(Cache.colleges.get(0).faculties, getContext(), TestGetGroup.selectedCourseId, courseClickListener);
                             facultyRecyclerView.setAdapter(facultyAdapter);
 
-//            CollegeGetter collegeGetter = new CollegeGetter();
-//            collegeGetter.GetAll(new ListCallback<College>() {
-//                @Override
-//                public void onSuccess(List<College> colleges) {
-//                    mHandler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            facultyRecyclerView.setLayoutManager(verticalLayoutManager);
-//                            FacultyAdapter facultyAdapter = new FacultyAdapter(colleges.get(0).faculties, getContext(), TestGetGroup.selectedCourseId, courseClickListener);
-//                            facultyRecyclerView.setAdapter(facultyAdapter);
-//                        }
-//                    });
-//                }
-//            });
             setGroups(Cache.courses.stream().filter(course -> course.id == TestGetGroup.selectedCourseId).findFirst().get().groups);
         }
         catch(Exception e){
@@ -126,5 +110,17 @@ public class GalleryFragment extends Fragment {
         });
 
 
+    }
+
+    private void SettingSwitch(){
+        binding.switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                }
+                else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
     }
 }

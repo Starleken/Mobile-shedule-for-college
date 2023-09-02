@@ -8,20 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,17 +31,16 @@ import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
 import com.example.myapplication.TestGetGroup;
-import com.example.myapplication.databinding.FragmentHomeBinding;
-import com.example.myapplication.ui.TeacherFragment;
+import com.example.myapplication.databinding.FragmentScheduleBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HomeFragment extends Fragment {
+public class ScheduleFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
+    private FragmentScheduleBinding binding;
 
     private View[] viewsToHide;
 
@@ -63,7 +55,7 @@ public class HomeFragment extends Fragment {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentScheduleBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         setViewsToHide();

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_color">#1C1E24</color>
+    <color name="CollegeGreen">#D1D1D1</color>
+    <color name="settings_pannel">#161616</color>
+    <color name="SettingsButton">#393939</color>
+
+    <color name="settings_active_text">#393939</color>
+    <color name="settings_active_button">#1F2027</color>
+    <color name="settings_inactive_text">#FFFFFF</color>
+    <color name="settings_inactive_button">#393939</color>
+</resources>
