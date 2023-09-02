@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Models.Audience.Audience;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
@@ -34,16 +35,21 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
     public interface OnTeacherClickListener{
         public void onTeacherClick(Teacher teacher);
     }
+    public interface OnAudienceClickListener{
+        public void onAudienceClick(Audience audience);
+    }
 
     private List<Pair> pairs;
     private Context context;
     private OnTeacherClickListener teacherClickListener;
+    private OnAudienceClickListener audienceClickListener;
 
 
-    public LessonAdapter(List<Pair> pairs, Context context, OnTeacherClickListener listener){
+    public LessonAdapter(List<Pair> pairs, Context context, OnTeacherClickListener teacherListener, OnAudienceClickListener audienceListener){
         this.pairs = pairs;
         this.context = context;
-        this.teacherClickListener = listener;
+        this.teacherClickListener = teacherListener;
+        this.audienceClickListener = audienceListener;
     }
 
     @NonNull
@@ -73,6 +79,15 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
                 @Override
                 public void onClick(View view) {
                     teacherClickListener.onTeacherClick(pair.teacherSubject.Teacher);
+                }
+            });
+        }
+
+        if (audienceClickListener != null){
+            holder.audienceText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    audienceClickListener.onAudienceClick(pair.audience);
                 }
             });
         }

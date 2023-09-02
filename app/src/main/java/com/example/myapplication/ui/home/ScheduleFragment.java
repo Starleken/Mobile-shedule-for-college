@@ -26,6 +26,7 @@ import com.example.myapplication.HTTPRequests.GroupGetter;
 import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.Interfaces.ElementCallback;
 import com.example.myapplication.Interfaces.ListCallback;
+import com.example.myapplication.Models.Audience.Audience;
 import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
@@ -111,12 +112,20 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void SetPairs(){
-        LessonAdapter.OnTeacherClickListener listener = new LessonAdapter.OnTeacherClickListener() {
+        LessonAdapter.OnTeacherClickListener teacherListener = new LessonAdapter.OnTeacherClickListener() {
             @Override
             public void onTeacherClick(Teacher teacher) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Teacher", teacher);
                 Navigation.findNavController(getView()).navigate(R.id.teacherFragment, bundle);
+            }
+        };
+        LessonAdapter.OnAudienceClickListener audienceListener = new LessonAdapter.OnAudienceClickListener() {
+            @Override
+            public void onAudienceClick(Audience audience) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Audience", audience);
+                Navigation.findNavController(getView()).navigate(R.id.audienceFragment, bundle);
             }
         };
 
@@ -142,7 +151,7 @@ public class ScheduleFragment extends Fragment {
                         @Override
                         public void run() {
                             for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
-                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), listener);
+                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), teacherListener, audienceListener);
 
                                 recyclerViewHashMap.get(entry.getKey()).setAdapter(dayAdapter);
                             }

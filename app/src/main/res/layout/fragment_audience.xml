@@ -1,0 +1,182 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.TeacherFragment">
+
+    <ProgressBar
+        android:id="@+id/AwaitProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/AudienceImage"
+                android:layout_width="361dp"
+                android:layout_height="251dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10sp"
+                android:background="@drawable/corner"
+                android:backgroundTint="@color/background_color"
+                app:srcCompat="@drawable/audience_image" />
+
+            <TextView
+                android:id="@+id/AudienceName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="25sp"
+                android:textColor="@color/CollegeGreen"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/CorpusName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="15sp"
+                android:textSize="20sp"
+                android:textColor="@color/CollegeGreen"
+                android:text="TextView" />
+
+            <LinearLayout
+                android:id="@+id/InfoLayout"
+                android:layout_width="304dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/corner"
+                android:backgroundTint="@color/settings_pannel"
+                android:elevation="10dp"
+                android:orientation="vertical"
+                android:padding="10sp">
+
+                <TextView
+                    android:id="@+id/InformationText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Дополнительная информация"
+                    android:textColor="@color/CollegeGreen"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/AddressText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:textColor="@color/CollegeGreen" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/AudienceMondayText"
+                android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
+                android:text="Понедельник"
+                android:textSize="34sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/AudienceMondayRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+            <TextView
+                android:id="@+id/AudienceTuesdayText"
+                android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
+                android:textSize="34sp"
+                android:text="Вторник" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/AudienceTuesdayRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+            <TextView
+                android:id="@+id/AudienceWednesdayText"
+                android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
+                android:text="Среда"
+                android:textSize="34sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/AudienceWednesdayRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+            <TextView
+                android:id="@+id/AudienceThursdayText"
+                android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
+                android:textSize="34sp"
+                android:text="Четверг" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/AudienceThursdayRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+            <TextView
+                android:id="@+id/AudienceFridayText"
+                android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
+                android:textSize="34sp"
+                android:text="Пятница" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/AudienceFridayRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+            <TextView
+                android:id="@+id/AudienceSaturdayText"
+                android:layout_width="match_parent"
+                android:layout_marginStart="10sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/CollegeGreen"
+                android:textSize="34sp"
+                android:text="Суббота" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/AudienceSaturdayRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

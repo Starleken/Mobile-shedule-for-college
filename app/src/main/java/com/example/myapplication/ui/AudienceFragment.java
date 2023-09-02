@@ -1,6 +1,5 @@
 package com.example.myapplication.ui;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,9 +19,11 @@ import android.widget.TextView;
 import com.example.myapplication.Adapters.LessonAdapter;
 import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.Interfaces.ListCallback;
+import com.example.myapplication.Models.Audience.Audience;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
+import com.example.myapplication.databinding.FragmentAudienceBinding;
 import com.example.myapplication.databinding.FragmentTeacherBinding;
 import com.squareup.picasso.Picasso;
 
@@ -33,17 +34,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TeacherFragment extends Fragment {
+public class AudienceFragment extends Fragment {
 
-    private FragmentTeacherBinding binding;
-
+    private FragmentAudienceBinding binding;
     private View[] viewsToHide;
     private ProgressBar progressBar;
-
-    private Teacher teacher;
-
-    private ImageView teacherImage;
-    private TextView teacherName;
+    private Audience audience;
+    private TextView audienceName;
+    private TextView corpusName;
+    private TextView addressText;
 
     private HashMap<String, RecyclerView> recyclerViewHashMap;
 
@@ -52,7 +51,7 @@ public class TeacherFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         try {
-            teacher = (Teacher) getArguments().getSerializable("Teacher");
+            audience = (Audience) getArguments().getSerializable("Audience");
         }
         catch(Exception e){
             Log.d("1111111", e.getMessage()); //TODO
@@ -62,28 +61,31 @@ public class TeacherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentTeacherBinding.inflate(inflater, container, false);
+        binding = FragmentAudienceBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        teacherImage = binding.TeacherImage;
-        teacherName = binding.TeacherName;
+
+        audienceName = binding.AudienceName;
+        corpusName = binding.CorpusName;
+        addressText = binding.AddressText;
 
         setViewsToHide();
         progressBar = binding.AwaitProgressBar;
 
         recyclerViewHashMap = new HashMap<String, RecyclerView>();
-        recyclerViewHashMap.put("Понедельник", binding.TeacherMondayRecyclerView);
-        recyclerViewHashMap.put("Вторник", binding.TeacherTuesdayRecyclerView);
-        recyclerViewHashMap.put("Среда", binding.TeacherWednesdayRecyclerView);
-        recyclerViewHashMap.put("Четверг", binding.TeacherThursdayRecyclerView);
-        recyclerViewHashMap.put("Пятница", binding.TeacherFridayRecyclerView);
-        recyclerViewHashMap.put("Суббота", binding.TeacherSaturdayRecyclerView);
+        recyclerViewHashMap.put("Понедельник", binding.AudienceMondayRecyclerView);
+        recyclerViewHashMap.put("Вторник", binding.AudienceTuesdayRecyclerView);
+        recyclerViewHashMap.put("Среда", binding.AudienceWednesdayRecyclerView);
+        recyclerViewHashMap.put("Четверг", binding.AudienceThursdayRecyclerView);
+        recyclerViewHashMap.put("Пятница", binding.AudienceFridayRecyclerView);
+        recyclerViewHashMap.put("Суббота", binding.AudienceSaturdayRecyclerView);
 
         for (RecyclerView recyclerView : recyclerViewHashMap.values()){
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
-        teacherName.setText(MessageFormat.format("{0} {1} {2}", teacher.LastName, teacher.Name , teacher.Patronymic));
+        audienceName.setText(MessageFormat.format("{0} аудитория", audience.name));
+        corpusName.setText(MessageFormat.format("корпус {0}", audience.corpu.name));
+        addressText.setText(MessageFormat.format("Адрес: {0}, {1}", audience.corpu.street.name, audience.corpu.numberOfHome));
 
         setPairs();
 
@@ -94,7 +96,6 @@ public class TeacherFragment extends Fragment {
         PairGetter getter = new PairGetter();
 
         try {
-            Picasso.get().load(MessageFormat.format("http://185.250.44.61:5002/avatars/{0}", teacher.Image)).error(R.drawable.teacher_photo).into(teacherImage);
             getter.GetAllPairs(new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> result) {
@@ -102,9 +103,9 @@ public class TeacherFragment extends Fragment {
 
                     HashMap<String, ArrayList<Pair>> dayPairsMap = new HashMap<>();
 
-                    List<Pair> teacherPairs = result.stream().filter(pair-> pair.teacherSubject.Teacher.id == teacher.id).collect(Collectors.toList());
+                    List<Pair> audiencePairs = result.stream().filter(pair-> pair.audience.id == audience.id).collect(Collectors.toList());
 
-                    for(Pair pair : teacherPairs){
+                    for(Pair pair : audiencePairs){
                         String dayName = pair.dayOfWeek.name;
                         if(!dayPairsMap.containsKey(dayName)){
                             dayPairsMap.put(dayName, new ArrayList<Pair>());
@@ -148,14 +149,16 @@ public class TeacherFragment extends Fragment {
 
     private void setViewsToHide(){
         viewsToHide = new View[]{
-                binding.TeacherImage,
-                binding.TeacherName,
-                binding.TeacherMondayText,
-                binding.TeacherTuesdayText,
-                binding.TeacherWednesdayText,
-                binding.TeacherThursdayText,
-                binding.TeacherFridayText,
-                binding.TeacherSaturdayText
+                binding.AudienceName,
+                binding.AudienceMondayText,
+                binding.AudienceTuesdayText,
+                binding.AudienceWednesdayText,
+                binding.AudienceThursdayText,
+                binding.AudienceFridayText,
+                binding.AudienceSaturdayText,
+                binding.InfoLayout,
+                binding.CorpusName,
+                binding.AudienceImage
         };
     }
 }
