@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -54,11 +52,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        TestGetGroup getGroup = new TestGetGroup();
-        getGroup.LoadData(this);
-
-        getCache();
     }
 
     @Override
@@ -75,33 +68,5 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public void getCache(){
-        CollegeGetter collegeGetter = new CollegeGetter();
-        try {
-            collegeGetter.GetAll(new ListCallback<College>() {
-                @Override
-                public void onSuccess(List<College> result) {
-                    Cache.colleges = result;
-                }
-            });
-            CourseGetter courseGetter = new CourseGetter();
-            courseGetter.GetAll(new ListCallback<Course>() {
-                @Override
-                public void onSuccess(List<Course> result) {
-                    Cache.courses = result;
-                }
-            });
-            TeacherGetter getter = new TeacherGetter();
-            getter.GetAll(new ListCallback<Teacher>() {
-                @Override
-                public void onSuccess(List<Teacher> result) {
-                    Cache.teachers = result;
-                }
-            });
-        }
-        catch(Exception e){
-            Log.d("11111", e.getMessage());
-        }
 
-    }
 }

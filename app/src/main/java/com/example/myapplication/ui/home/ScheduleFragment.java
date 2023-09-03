@@ -22,15 +22,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Adapters.LessonAdapter;
 import com.example.myapplication.Adapters.SearchableAdapter;
 import com.example.myapplication.Cache;
+import com.example.myapplication.HTTPRequests.CollegeGetter;
+import com.example.myapplication.HTTPRequests.CourseGetter;
 import com.example.myapplication.HTTPRequests.GroupGetter;
 import com.example.myapplication.HTTPRequests.PairGetter;
+import com.example.myapplication.HTTPRequests.TeacherGetter;
 import com.example.myapplication.Interfaces.ElementCallback;
 import com.example.myapplication.Interfaces.ListCallback;
 import com.example.myapplication.Models.Audience.Audience;
 import com.example.myapplication.Models.Audience.Group;
+import com.example.myapplication.Models.College;
+import com.example.myapplication.Models.Course;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
+import com.example.myapplication.RecyclerViewContainer;
 import com.example.myapplication.TestGetGroup;
 import com.example.myapplication.databinding.FragmentScheduleBinding;
 
@@ -45,7 +51,7 @@ public class ScheduleFragment extends Fragment {
 
     private View[] viewsToHide;
 
-    private HashMap<String, RecyclerView> recyclerViewHashMap;
+    private HashMap<String, RecyclerViewContainer> recyclerViewHashMap;
 
     private ProgressBar progressBar;
 
@@ -61,38 +67,27 @@ public class ScheduleFragment extends Fragment {
 
         setViewsToHide();
 
-        recyclerViewHashMap = new HashMap<String, RecyclerView>();
+        recyclerViewHashMap = new HashMap<String, RecyclerViewContainer>();
 
-        recyclerViewHashMap.put("Понедельник", binding.MondayRecyclerView);
-        recyclerViewHashMap.put("Вторник", binding.TuesdayRecyclerView);
-        recyclerViewHashMap.put("Среда", binding.WednesdayRecyclerView);
-        recyclerViewHashMap.put("Четверг", binding.ThursdayRecyclerView);
-        recyclerViewHashMap.put("Пятница", binding.FridayRecyclerView);
-        recyclerViewHashMap.put("Суббота", binding.SaturdayRecyclerView);
+        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.MondayRecyclerView, binding.MondayText));
+        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.TuesdayRecyclerView, binding.TuesdayText));
+        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.WednesdayRecyclerView, binding.WednesdayText));
+        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.ThursdayRecyclerView, binding.ThursdayText));
+        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.FridayRecyclerView, binding.FridayText));
+        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.SaturdayRecyclerView, binding.SaturdayText));
 
-        for (RecyclerView recyclerView : recyclerViewHashMap.values()){
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        for (RecyclerViewContainer recyclerViewContainer : recyclerViewHashMap.values()){
+            recyclerViewContainer.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
         progressBar = binding.AwaitProgressBar;
 
         searchTextView = binding.autoCompleteTextView;
 
-        try {
-            SearchableAdapter adapter = new SearchableAdapter(Cache.teachers, getContext());
-            searchTextView.setAdapter(adapter);
-            searchTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Teacher", adapter.getItem(i));
-                    Navigation.findNavController(getView()).navigate(R.id.teacherFragment, bundle);
-                }
-            });
-        }
-        catch(Exception e){
-            Log.d("1111111111",e.getMessage());
-        }
+        TestGetGroup getGroup = new TestGetGroup();
+        getGroup.LoadData(getContext());
+
+        getCache();
 
         return root;
     }
@@ -132,6 +127,7 @@ public class ScheduleFragment extends Fragment {
         PairGetter getter = new PairGetter();
         try {
             setLoadUI();
+
             getter.GetGroupPairs(TestGetGroup.selectedGroupId,new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> pairs) {
@@ -153,11 +149,18 @@ public class ScheduleFragment extends Fragment {
                             for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
                                 LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), teacherListener, audienceListener);
 
-                                recyclerViewHashMap.get(entry.getKey()).setAdapter(dayAdapter);
+                                RecyclerViewContainer recyclerView = recyclerViewHashMap.get(entry.getKey());
+                                recyclerView.getRecyclerView().setAdapter(dayAdapter);
                             }
                             searchTextView.setText(null);
 
                             onDataUILoaded();
+
+                            for (RecyclerViewContainer container : recyclerViewHashMap.values()){
+                                if(container.getRecyclerView().getAdapter() == null){
+                                    container.HideVisibility();
+                                }
+                            }
                         }
                     });
                 }
@@ -171,6 +174,10 @@ public class ScheduleFragment extends Fragment {
     private void setGroup(){
         GroupGetter getter = new GroupGetter();
         try {
+            if(TestGetGroup.selectedGroupId == -1){
+                binding.ScheduleText.setText("Выберите группу");
+            }
+
             getter.GetGroupById(TestGetGroup.selectedGroupId, new ElementCallback<Group>() {
                 @Override
                 public void onSuccess(Group group) {
@@ -216,5 +223,60 @@ public class ScheduleFragment extends Fragment {
                 binding.SaturdayText,
                 binding.autoCompleteTextView
         };
+    }
+
+    public void getCache(){
+        CollegeGetter collegeGetter = new CollegeGetter();
+        try {
+            collegeGetter.GetAll(new ListCallback<College>() {
+                @Override
+                public void onSuccess(List<College> result) {
+                    Cache.colleges = result;
+                }
+            });
+            CourseGetter courseGetter = new CourseGetter();
+            courseGetter.GetAll(new ListCallback<Course>() {
+                @Override
+                public void onSuccess(List<Course> result) {
+                    Cache.courses = result;
+                }
+            });
+            TeacherGetter getter = new TeacherGetter();
+            getter.GetAll(new ListCallback<Teacher>() {
+                @Override
+                public void onSuccess(List<Teacher> result) {
+                    Cache.teachers = result;
+                    setSearching();
+                }
+            });
+        }
+        catch(Exception e){
+            Log.d("11111", e.getMessage());
+        }
+
+    }
+
+    private void setSearching(){
+        try {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    SearchableAdapter adapter = new SearchableAdapter(Cache.teachers, getContext());
+                    searchTextView.setAdapter(adapter);
+                    searchTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Teacher", adapter.getItem(i));
+                            Navigation.findNavController(getView()).navigate(R.id.teacherFragment, bundle);
+                        }
+                    });
+                }
+            });
+        }
+        catch(Exception e){
+            Log.d("1111111111",e.getMessage());
+        }
     }
 }

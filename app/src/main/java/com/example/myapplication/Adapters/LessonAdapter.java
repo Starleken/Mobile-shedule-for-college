@@ -29,6 +29,8 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonViewHolder> {
@@ -47,6 +49,16 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
 
     public LessonAdapter(List<Pair> pairs, Context context, OnTeacherClickListener teacherListener, OnAudienceClickListener audienceListener){
         this.pairs = pairs;
+
+        Collections.sort(this.pairs, new Comparator<Pair>() {
+            @Override
+            public int compare(Pair pair, Pair t1) {
+                int firstDate = Integer.parseInt(pair.time.name.split(":")[0]);
+                int secondtDate = Integer.parseInt(t1.time.name.split(":")[0]);
+                return Integer.compare(firstDate, secondtDate);
+            }
+        });
+
         this.context = context;
         this.teacherClickListener = teacherListener;
         this.audienceClickListener = audienceListener;

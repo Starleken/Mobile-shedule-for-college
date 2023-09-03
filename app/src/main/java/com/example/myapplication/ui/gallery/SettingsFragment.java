@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.gallery;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +42,7 @@ public class SettingsFragment extends Fragment {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        setSwitchByTheme();
         SettingSwitch();
 
         groupRecyclerView = binding.GroupRecyclerView;
@@ -122,5 +124,13 @@ public class SettingsFragment extends Fragment {
                 else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
+    }
+
+    private void setSwitchByTheme(){
+        int themeMask = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        if (themeMask == Configuration.UI_MODE_NIGHT_YES) {
+            binding.switch3.setChecked(true);
+        }
     }
 }

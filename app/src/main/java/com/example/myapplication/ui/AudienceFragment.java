@@ -23,6 +23,7 @@ import com.example.myapplication.Models.Audience.Audience;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
+import com.example.myapplication.RecyclerViewContainer;
 import com.example.myapplication.databinding.FragmentAudienceBinding;
 import com.example.myapplication.databinding.FragmentTeacherBinding;
 import com.squareup.picasso.Picasso;
@@ -44,7 +45,7 @@ public class AudienceFragment extends Fragment {
     private TextView corpusName;
     private TextView addressText;
 
-    private HashMap<String, RecyclerView> recyclerViewHashMap;
+    private HashMap<String, RecyclerViewContainer> recyclerViewHashMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,16 +72,16 @@ public class AudienceFragment extends Fragment {
         setViewsToHide();
         progressBar = binding.AwaitProgressBar;
 
-        recyclerViewHashMap = new HashMap<String, RecyclerView>();
-        recyclerViewHashMap.put("Понедельник", binding.AudienceMondayRecyclerView);
-        recyclerViewHashMap.put("Вторник", binding.AudienceTuesdayRecyclerView);
-        recyclerViewHashMap.put("Среда", binding.AudienceWednesdayRecyclerView);
-        recyclerViewHashMap.put("Четверг", binding.AudienceThursdayRecyclerView);
-        recyclerViewHashMap.put("Пятница", binding.AudienceFridayRecyclerView);
-        recyclerViewHashMap.put("Суббота", binding.AudienceSaturdayRecyclerView);
+        recyclerViewHashMap = new HashMap();
+        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.AudienceMondayRecyclerView, binding.AudienceMondayText));
+        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.AudienceTuesdayRecyclerView, binding.AudienceTuesdayText));
+        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.AudienceWednesdayRecyclerView, binding.AudienceWednesdayText));
+        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.AudienceThursdayRecyclerView, binding.AudienceThursdayText));
+        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.AudienceFridayRecyclerView, binding.AudienceFridayText));
+        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.AudienceSaturdayRecyclerView, binding.AudienceSaturdayText));
 
-        for (RecyclerView recyclerView : recyclerViewHashMap.values()){
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        for (RecyclerViewContainer recyclerView : recyclerViewHashMap.values()){
+            recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
         }
 
         audienceName.setText(MessageFormat.format("{0} аудитория", audience.name));
@@ -119,9 +120,15 @@ public class AudienceFragment extends Fragment {
                             for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
                                 LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), null, null);
 
-                                recyclerViewHashMap.get(entry.getKey()).setAdapter(dayAdapter);
+                                recyclerViewHashMap.get(entry.getKey()).getRecyclerView().setAdapter(dayAdapter);
                             }
                             onDataUILoaded();
+
+                            for (RecyclerViewContainer container : recyclerViewHashMap.values()){
+                                if(container.getRecyclerView().getAdapter() == null){
+                                    container.HideVisibility();
+                                }
+                            }
                         }
                     });
                 }
