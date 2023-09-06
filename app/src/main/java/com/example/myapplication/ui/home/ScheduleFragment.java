@@ -29,15 +29,18 @@ import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.HTTPRequests.TeacherGetter;
 import com.example.myapplication.Interfaces.ElementCallback;
 import com.example.myapplication.Interfaces.ListCallback;
+import com.example.myapplication.ListenersGetter;
 import com.example.myapplication.Models.Audience.Audience;
 import com.example.myapplication.Models.Audience.Group;
 import com.example.myapplication.Models.College;
 import com.example.myapplication.Models.Course;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
+import com.example.myapplication.PairPutter;
 import com.example.myapplication.R;
 import com.example.myapplication.RecyclerViewContainer;
 import com.example.myapplication.TestGetGroup;
+import com.example.myapplication.UILoadHandler;
 import com.example.myapplication.databinding.FragmentScheduleBinding;
 
 import java.util.ArrayList;
@@ -59,30 +62,10 @@ public class ScheduleFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
         binding = FragmentScheduleBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        setViewsToHide();
-
-        recyclerViewHashMap = new HashMap<String, RecyclerViewContainer>();
-
-        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.MondayRecyclerView, binding.MondayText));
-        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.TuesdayRecyclerView, binding.TuesdayText));
-        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.WednesdayRecyclerView, binding.WednesdayText));
-        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.ThursdayRecyclerView, binding.ThursdayText));
-        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.FridayRecyclerView, binding.FridayText));
-        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.SaturdayRecyclerView, binding.SaturdayText));
-
-        for (RecyclerViewContainer recyclerViewContainer : recyclerViewHashMap.values()){
-            recyclerViewContainer.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        }
-
-        progressBar = binding.AwaitProgressBar;
-
-        searchTextView = binding.autoCompleteTextView;
+        setViews();
 
         TestGetGroup getGroup = new TestGetGroup();
         getGroup.LoadData(getContext());
@@ -92,12 +75,21 @@ public class ScheduleFragment extends Fragment {
         return root;
     }
 
+    private void setViews(){
+        setViewsToHide();
+        setRecyclerViewHashMap();
+
+        progressBar = binding.AwaitProgressBar;
+
+        searchTextView = binding.autoCompleteTextView;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         setGroup();
-        SetPairs();
+        setPairs();
     }
 
     @Override
@@ -106,63 +98,24 @@ public class ScheduleFragment extends Fragment {
         binding = null;
     }
 
-    private void SetPairs(){
-        LessonAdapter.OnTeacherClickListener teacherListener = new LessonAdapter.OnTeacherClickListener() {
-            @Override
-            public void onTeacherClick(Teacher teacher) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Teacher", teacher);
-                Navigation.findNavController(getView()).navigate(R.id.teacherFragment, bundle);
-            }
-        };
-        LessonAdapter.OnAudienceClickListener audienceListener = new LessonAdapter.OnAudienceClickListener() {
-            @Override
-            public void onAudienceClick(Audience audience) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Audience", audience);
-                Navigation.findNavController(getView()).navigate(R.id.audienceFragment, bundle);
-            }
-        };
+    private void setPairs(){
+        UILoadHandler uiLoadHandler = new UILoadHandler();
+
+        ListenersGetter listenersGetter = new ListenersGetter(getView());
+        LessonAdapter.OnTeacherClickListener teacherListener = listenersGetter.getTeacherListener();
+        LessonAdapter.OnAudienceClickListener audienceListener = listenersGetter.getAudienceListener();
 
         PairGetter getter = new PairGetter();
         try {
-            setLoadUI();
+            uiLoadHandler.setLoadUI(viewsToHide, progressBar);
 
             getter.GetGroupPairs(TestGetGroup.selectedGroupId,new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> pairs) {
-                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    PairPutter pairPutter = new PairPutter(getContext());
+                    pairPutter.putPairs(pairs, recyclerViewHashMap, teacherListener, audienceListener);
 
-                    HashMap<String, ArrayList<Pair>> dayPairsMap = new HashMap<>();
-
-                    for(Pair pair : pairs){
-                        String dayName = pair.dayOfWeek.name;
-                        if(!dayPairsMap.containsKey(dayName)){
-                            dayPairsMap.put(dayName, new ArrayList<Pair>());
-                        }
-                        dayPairsMap.get(dayName).add(pair);
-                    }
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
-                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), teacherListener, audienceListener);
-
-                                RecyclerViewContainer recyclerView = recyclerViewHashMap.get(entry.getKey());
-                                recyclerView.getRecyclerView().setAdapter(dayAdapter);
-                            }
-                            searchTextView.setText(null);
-
-                            onDataUILoaded();
-
-                            for (RecyclerViewContainer container : recyclerViewHashMap.values()){
-                                if(container.getRecyclerView().getAdapter() == null){
-                                    container.HideVisibility();
-                                }
-                            }
-                        }
-                    });
+                    uiLoadHandler.onDataUILoaded(viewsToHide, progressBar);
                 }
             });
         }
@@ -196,22 +149,6 @@ public class ScheduleFragment extends Fragment {
         }
     }
 
-    private void setLoadUI(){
-        for (View view : viewsToHide){
-            view.setVisibility(View.GONE);
-        }
-
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void onDataUILoaded(){
-        for (View view : viewsToHide){
-                view.setVisibility(View.VISIBLE);
-        }
-
-        progressBar.setVisibility(View.GONE);
-    }
-
     private void setViewsToHide(){
         viewsToHide = new View[]{
                 binding.ScheduleText,
@@ -223,6 +160,21 @@ public class ScheduleFragment extends Fragment {
                 binding.SaturdayText,
                 binding.autoCompleteTextView
         };
+    }
+
+    private void setRecyclerViewHashMap(){
+        recyclerViewHashMap = new HashMap<>();
+
+        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.MondayRecyclerView, binding.MondayText));
+        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.TuesdayRecyclerView, binding.TuesdayText));
+        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.WednesdayRecyclerView, binding.WednesdayText));
+        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.ThursdayRecyclerView, binding.ThursdayText));
+        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.FridayRecyclerView, binding.FridayText));
+        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.SaturdayRecyclerView, binding.SaturdayText));
+
+        for (RecyclerViewContainer recyclerViewContainer : recyclerViewHashMap.values()){
+            recyclerViewContainer.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
+        }
     }
 
     public void getCache(){

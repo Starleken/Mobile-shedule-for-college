@@ -10,17 +10,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.myapplication.Interfaces.ISearchable;
 import com.example.myapplication.Models.Teacher;
 import com.example.myapplication.R;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SearchableAdapter extends BaseAdapter implements Filterable {
     private List<Teacher> allTeachers;
@@ -58,7 +53,7 @@ public class SearchableAdapter extends BaseAdapter implements Filterable {
             }
             Teacher teacher = getItem(i);
             TextView text = (TextView) view.findViewById(R.id.SearchableText);
-            text.setText(teacher.GetText());
+            text.setText(teacher.getFullName());
         } catch (Exception e) {
             Log.d("11111111111", e.getMessage());
         }
@@ -70,7 +65,7 @@ public class SearchableAdapter extends BaseAdapter implements Filterable {
         return new Filter() {
             @Override
             public String convertResultToString(Object resultValue) {
-                return ((Teacher) resultValue).GetText();
+                return ((Teacher) resultValue).getFullName();
             }
 
             @Override
@@ -79,7 +74,7 @@ public class SearchableAdapter extends BaseAdapter implements Filterable {
                 List<Teacher> teachersSuggestion = new ArrayList<>();
                 if (constraint != null) {
                     for (Teacher teacher : teachers) {
-                        if (teacher.GetText().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+                        if (teacher.getFullName().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
                             teachersSuggestion.add(teacher);
                         }
                     }

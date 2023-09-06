@@ -22,7 +22,7 @@ public class RecyclerViewContainer {
         this.textView = textView;
     }
 
-    public void HideVisibility(){
+    public void hideVisibility(){
         recyclerView.setVisibility(View.GONE);
         textView.setVisibility(View.GONE);
     }

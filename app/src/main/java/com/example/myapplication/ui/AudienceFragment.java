@@ -19,11 +19,14 @@ import android.widget.TextView;
 import com.example.myapplication.Adapters.LessonAdapter;
 import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.Interfaces.ListCallback;
+import com.example.myapplication.ListenersGetter;
 import com.example.myapplication.Models.Audience.Audience;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
+import com.example.myapplication.PairPutter;
 import com.example.myapplication.R;
 import com.example.myapplication.RecyclerViewContainer;
+import com.example.myapplication.UILoadHandler;
 import com.example.myapplication.databinding.FragmentAudienceBinding;
 import com.example.myapplication.databinding.FragmentTeacherBinding;
 import com.squareup.picasso.Picasso;
@@ -65,93 +68,50 @@ public class AudienceFragment extends Fragment {
         binding = FragmentAudienceBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        audienceName = binding.AudienceName;
-        corpusName = binding.CorpusName;
-        addressText = binding.AddressText;
-
-        setViewsToHide();
-        progressBar = binding.AwaitProgressBar;
-
-        recyclerViewHashMap = new HashMap();
-        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.AudienceMondayRecyclerView, binding.AudienceMondayText));
-        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.AudienceTuesdayRecyclerView, binding.AudienceTuesdayText));
-        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.AudienceWednesdayRecyclerView, binding.AudienceWednesdayText));
-        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.AudienceThursdayRecyclerView, binding.AudienceThursdayText));
-        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.AudienceFridayRecyclerView, binding.AudienceFridayText));
-        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.AudienceSaturdayRecyclerView, binding.AudienceSaturdayText));
-
-        for (RecyclerViewContainer recyclerView : recyclerViewHashMap.values()){
-            recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        }
-
-        audienceName.setText(MessageFormat.format("{0} аудитория", audience.name));
-        corpusName.setText(MessageFormat.format("корпус {0}", audience.corpu.name));
-        addressText.setText(MessageFormat.format("Адрес: {0}, {1}", audience.corpu.street.name, audience.corpu.numberOfHome));
-
+        setViews();
+        setStartData();
         setPairs();
 
         return root;
     }
 
-    private void setPairs(){
+    private void setViews(){
+        audienceName = binding.AudienceName;
+        corpusName = binding.CorpusName;
+        addressText = binding.AddressText;
+
+        setViewsToHide();
+        setRecyclerViewHashMap();
+        progressBar = binding.AwaitProgressBar;
+    }
+
+    private void setStartData(){
+        audienceName.setText(MessageFormat.format("{0} аудитория", audience.name));
+        corpusName.setText(MessageFormat.format("корпус {0}", audience.corpu.name));
+        addressText.setText(MessageFormat.format("Адрес: {0}, {1}", audience.corpu.street.name, audience.corpu.numberOfHome));
+    }
+
+    private void setPairs() {
         PairGetter getter = new PairGetter();
+
+        UILoadHandler uiLoadHandler = new UILoadHandler();
+        PairPutter pairPutter = new PairPutter(getContext());
+        ListenersGetter listenersGetter = new ListenersGetter(getView());
 
         try {
             getter.GetAllPairs(new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> result) {
-                    Handler mHandler = new Handler(Looper.getMainLooper());
+                    List<Pair> audiencePairs = result.stream().filter(pair -> pair.audience.id == audience.id).collect(Collectors.toList());
+                    pairPutter.putPairs(audiencePairs, recyclerViewHashMap, listenersGetter.getTeacherListener(), null);
 
-                    HashMap<String, ArrayList<Pair>> dayPairsMap = new HashMap<>();
-
-                    List<Pair> audiencePairs = result.stream().filter(pair-> pair.audience.id == audience.id).collect(Collectors.toList());
-
-                    for(Pair pair : audiencePairs){
-                        String dayName = pair.dayOfWeek.name;
-                        if(!dayPairsMap.containsKey(dayName)){
-                            dayPairsMap.put(dayName, new ArrayList<Pair>());
-                        }
-                        dayPairsMap.get(dayName).add(pair);
-                    }
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
-                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), null, null);
-
-                                recyclerViewHashMap.get(entry.getKey()).getRecyclerView().setAdapter(dayAdapter);
-                            }
-                            onDataUILoaded();
-
-                            for (RecyclerViewContainer container : recyclerViewHashMap.values()){
-                                if(container.getRecyclerView().getAdapter() == null){
-                                    container.HideVisibility();
-                                }
-                            }
-                        }
-                    });
+                    uiLoadHandler.onDataUILoaded(viewsToHide, progressBar);
                 }
             });
-            setLoadUI();
-        }
-        catch(Exception e){
+            uiLoadHandler.setLoadUI(viewsToHide, progressBar);
+        } catch (Exception e) {
             Log.d("11111", e.getMessage());
         }
-    }
-
-    private void setLoadUI(){
-        for (View view : viewsToHide){
-            view.setVisibility(View.GONE);
-        }
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void onDataUILoaded(){
-        for (View view : viewsToHide){
-            view.setVisibility(View.VISIBLE);
-        }
-        progressBar.setVisibility(View.GONE);
     }
 
     private void setViewsToHide(){
@@ -167,5 +127,19 @@ public class AudienceFragment extends Fragment {
                 binding.CorpusName,
                 binding.AudienceImage
         };
+    }
+
+    private void setRecyclerViewHashMap(){
+        recyclerViewHashMap = new HashMap();
+        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.AudienceMondayRecyclerView, binding.AudienceMondayText));
+        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.AudienceTuesdayRecyclerView, binding.AudienceTuesdayText));
+        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.AudienceWednesdayRecyclerView, binding.AudienceWednesdayText));
+        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.AudienceThursdayRecyclerView, binding.AudienceThursdayText));
+        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.AudienceFridayRecyclerView, binding.AudienceFridayText));
+        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.AudienceSaturdayRecyclerView, binding.AudienceSaturdayText));
+
+        for (RecyclerViewContainer recyclerView : recyclerViewHashMap.values()){
+            recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
+        }
     }
 }

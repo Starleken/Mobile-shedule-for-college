@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myapplication.databinding.FragmentSlideshowBinding;
 
 public class SlideshowFragment extends Fragment {
-
     private FragmentSlideshowBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,

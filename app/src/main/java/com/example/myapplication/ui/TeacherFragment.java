@@ -20,10 +20,13 @@ import android.widget.TextView;
 import com.example.myapplication.Adapters.LessonAdapter;
 import com.example.myapplication.HTTPRequests.PairGetter;
 import com.example.myapplication.Interfaces.ListCallback;
+import com.example.myapplication.ListenersGetter;
 import com.example.myapplication.Models.Pair;
 import com.example.myapplication.Models.Teacher;
+import com.example.myapplication.PairPutter;
 import com.example.myapplication.R;
 import com.example.myapplication.RecyclerViewContainer;
+import com.example.myapplication.UILoadHandler;
 import com.example.myapplication.databinding.FragmentTeacherBinding;
 import com.squareup.picasso.Picasso;
 
@@ -66,91 +69,49 @@ public class TeacherFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentTeacherBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        teacherImage = binding.TeacherImage;
-        teacherName = binding.TeacherName;
 
-        setViewsToHide();
-        progressBar = binding.AwaitProgressBar;
-
-        recyclerViewHashMap = new HashMap();
-        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.TeacherMondayRecyclerView, binding.TeacherMondayText));
-        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.TeacherTuesdayRecyclerView, binding.TeacherTuesdayText));
-        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.TeacherWednesdayRecyclerView, binding.TeacherWednesdayText));
-        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.TeacherThursdayRecyclerView, binding.TeacherThursdayText));
-        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.TeacherFridayRecyclerView, binding.TeacherFridayText));
-        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.TeacherSaturdayRecyclerView, binding.TeacherSaturdayText));
-
-        for (RecyclerViewContainer recyclerView : recyclerViewHashMap.values()){
-            recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
-        }
-
-        teacherName.setText(MessageFormat.format("{0} {1} {2}", teacher.LastName, teacher.Name , teacher.Patronymic));
-
+        setViews();
+        setStartData();
         setPairs();
 
         return root;
     }
 
+    private void setViews(){
+        teacherImage = binding.TeacherImage;
+        teacherName = binding.TeacherName;
+
+        setViewsToHide();
+        setRecyclerViewHashMap();
+        progressBar = binding.AwaitProgressBar;
+    }
+
+    private void setStartData(){
+        Picasso.get().load(MessageFormat.format("http://185.250.44.61:5002/avatars/{0}", teacher.Image)).error(R.drawable.teacher_photo).into(teacherImage);
+        teacherName.setText(MessageFormat.format("{0} {1} {2}", teacher.LastName, teacher.Name , teacher.Patronymic));
+    }
+
     private void setPairs(){
         PairGetter getter = new PairGetter();
+        UILoadHandler uiLoadHandler = new UILoadHandler();
+        PairPutter pairPutter = new PairPutter(getContext());
+        ListenersGetter listenersGetter = new ListenersGetter(getView());
 
         try {
-            Picasso.get().load(MessageFormat.format("http://185.250.44.61:5002/avatars/{0}", teacher.Image)).error(R.drawable.teacher_photo).into(teacherImage);
             getter.GetAllPairs(new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> result) {
-                    Handler mHandler = new Handler(Looper.getMainLooper());
-
-                    HashMap<String, ArrayList<Pair>> dayPairsMap = new HashMap<>();
-
                     List<Pair> teacherPairs = result.stream().filter(pair-> pair.teacherSubject.Teacher.id == teacher.id).collect(Collectors.toList());
 
-                    for(Pair pair : teacherPairs){
-                        String dayName = pair.dayOfWeek.name;
-                        if(!dayPairsMap.containsKey(dayName)){
-                            dayPairsMap.put(dayName, new ArrayList<Pair>());
-                        }
-                        dayPairsMap.get(dayName).add(pair);
-                    }
-
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(Map.Entry<String, ArrayList<Pair>> entry : dayPairsMap.entrySet()){
-                                LessonAdapter dayAdapter = new LessonAdapter(entry.getValue(), getContext(), null, null);
-
-                                recyclerViewHashMap.get(entry.getKey()).getRecyclerView().setAdapter(dayAdapter);
-                            }
-                            onDataUILoaded();
-
-                            for (RecyclerViewContainer container : recyclerViewHashMap.values()){
-                                if(container.getRecyclerView().getAdapter() == null){
-                                    container.HideVisibility();
-                                }
-                            }
-                        }
-                    });
+                    pairPutter.putPairs(teacherPairs, recyclerViewHashMap, null, null);
+                    uiLoadHandler.onDataUILoaded(viewsToHide, progressBar);
                 }
             });
-            setLoadUI();
+            uiLoadHandler.setLoadUI(viewsToHide, progressBar);
         }
         catch(Exception e){
             Log.d("11111", e.getMessage());
         }
-    }
-
-    private void setLoadUI(){
-        for (View view : viewsToHide){
-            view.setVisibility(View.GONE);
-        }
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void onDataUILoaded(){
-        for (View view : viewsToHide){
-            view.setVisibility(View.VISIBLE);
-        }
-        progressBar.setVisibility(View.GONE);
     }
 
     private void setViewsToHide(){
@@ -164,5 +125,19 @@ public class TeacherFragment extends Fragment {
                 binding.TeacherFridayText,
                 binding.TeacherSaturdayText
         };
+    }
+
+    private void setRecyclerViewHashMap(){
+        recyclerViewHashMap = new HashMap();
+        recyclerViewHashMap.put("Понедельник", new RecyclerViewContainer(binding.TeacherMondayRecyclerView, binding.TeacherMondayText));
+        recyclerViewHashMap.put("Вторник", new RecyclerViewContainer(binding.TeacherTuesdayRecyclerView, binding.TeacherTuesdayText));
+        recyclerViewHashMap.put("Среда", new RecyclerViewContainer(binding.TeacherWednesdayRecyclerView, binding.TeacherWednesdayText));
+        recyclerViewHashMap.put("Четверг", new RecyclerViewContainer(binding.TeacherThursdayRecyclerView, binding.TeacherThursdayText));
+        recyclerViewHashMap.put("Пятница", new RecyclerViewContainer(binding.TeacherFridayRecyclerView, binding.TeacherFridayText));
+        recyclerViewHashMap.put("Суббота", new RecyclerViewContainer(binding.TeacherSaturdayRecyclerView, binding.TeacherSaturdayText));
+
+        for (RecyclerViewContainer recyclerView : recyclerViewHashMap.values()){
+            recyclerView.getRecyclerView().setLayoutManager(new LinearLayoutManager(getContext()));
+        }
     }
 }

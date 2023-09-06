@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -36,21 +35,23 @@ public class SettingsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        GalleryViewModel galleryViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
 
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         setSwitchByTheme();
-        SettingSwitch();
+        settingSwitch();
 
-        groupRecyclerView = binding.GroupRecyclerView;
-        facultyRecyclerView = binding.FacultyRecyclerView;
+        setViews();
 
         setFaculties();
 
         return root;
+    }
+
+    private void setViews(){
+        groupRecyclerView = binding.GroupRecyclerView;
+        facultyRecyclerView = binding.FacultyRecyclerView;
     }
 
     @Override
@@ -114,7 +115,7 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    private void SettingSwitch(){
+    private void settingSwitch(){
         binding.switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
