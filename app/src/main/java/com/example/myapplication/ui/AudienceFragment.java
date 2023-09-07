@@ -94,8 +94,8 @@ public class AudienceFragment extends Fragment {
     private void setPairs() {
         PairGetter getter = new PairGetter();
 
-        UILoadHandler uiLoadHandler = new UILoadHandler();
-        PairPutter pairPutter = new PairPutter(getContext());
+        UILoadHandler uiLoadHandler = new UILoadHandler(viewsToHide, progressBar);
+        PairPutter pairPutter = new PairPutter(uiLoadHandler, getContext());
         ListenersGetter listenersGetter = new ListenersGetter(getView());
 
         try {
@@ -104,11 +104,9 @@ public class AudienceFragment extends Fragment {
                 public void onSuccess(List<Pair> result) {
                     List<Pair> audiencePairs = result.stream().filter(pair -> pair.audience.id == audience.id).collect(Collectors.toList());
                     pairPutter.putPairs(audiencePairs, recyclerViewHashMap, listenersGetter.getTeacherListener(), null);
-
-                    uiLoadHandler.onDataUILoaded(viewsToHide, progressBar);
                 }
             });
-            uiLoadHandler.setLoadUI(viewsToHide, progressBar);
+            uiLoadHandler.setLoadUI();
         } catch (Exception e) {
             Log.d("11111", e.getMessage());
         }

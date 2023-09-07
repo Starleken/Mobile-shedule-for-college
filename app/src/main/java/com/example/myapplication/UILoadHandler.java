@@ -6,7 +6,15 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 public class UILoadHandler {
-    public void setLoadUI(View[] viewsToHide, ProgressBar progressBar){
+    View[] viewsToHide;
+    ProgressBar progressBar;
+
+    public UILoadHandler(View[] viewsToHide, ProgressBar progressBar){
+        this.viewsToHide = viewsToHide;
+        this.progressBar = progressBar;
+    }
+
+    public void setLoadUI(){
         for (View view : viewsToHide){
             view.setVisibility(View.GONE);
         }
@@ -14,17 +22,11 @@ public class UILoadHandler {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    public void onDataUILoaded(View[] viewsToShow, ProgressBar progressBar){
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                for (View view : viewsToShow){
-                    view.setVisibility(View.VISIBLE);
-                }
+    public void onDataUILoaded(){
+        for (View view : viewsToHide){
+            view.setVisibility(View.VISIBLE);
+        }
 
-                progressBar.setVisibility(View.GONE);
-            }
-        });
+        progressBar.setVisibility(View.GONE);
     }
 }

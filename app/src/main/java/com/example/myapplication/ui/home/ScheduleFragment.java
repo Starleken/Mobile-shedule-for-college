@@ -99,7 +99,7 @@ public class ScheduleFragment extends Fragment {
     }
 
     private void setPairs(){
-        UILoadHandler uiLoadHandler = new UILoadHandler();
+        UILoadHandler uiLoadHandler = new UILoadHandler(viewsToHide, progressBar);
 
         ListenersGetter listenersGetter = new ListenersGetter(getView());
         LessonAdapter.OnTeacherClickListener teacherListener = listenersGetter.getTeacherListener();
@@ -107,17 +107,14 @@ public class ScheduleFragment extends Fragment {
 
         PairGetter getter = new PairGetter();
         try {
-            uiLoadHandler.setLoadUI(viewsToHide, progressBar);
-
             getter.GetGroupPairs(TestGetGroup.selectedGroupId,new ListCallback<Pair>() {
                 @Override
                 public void onSuccess(List<Pair> pairs) {
-                    PairPutter pairPutter = new PairPutter(getContext());
+                    PairPutter pairPutter = new PairPutter(uiLoadHandler,getContext());
                     pairPutter.putPairs(pairs, recyclerViewHashMap, teacherListener, audienceListener);
-
-                    uiLoadHandler.onDataUILoaded(viewsToHide, progressBar);
                 }
             });
+            uiLoadHandler.setLoadUI();
         }
         catch(Exception e){
             Log.d("GGGGG", e.getMessage());

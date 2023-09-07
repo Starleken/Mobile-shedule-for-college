@@ -93,8 +93,8 @@ public class TeacherFragment extends Fragment {
 
     private void setPairs(){
         PairGetter getter = new PairGetter();
-        UILoadHandler uiLoadHandler = new UILoadHandler();
-        PairPutter pairPutter = new PairPutter(getContext());
+        UILoadHandler uiLoadHandler = new UILoadHandler(viewsToHide, progressBar);
+        PairPutter pairPutter = new PairPutter(uiLoadHandler, getContext());
         ListenersGetter listenersGetter = new ListenersGetter(getView());
 
         try {
@@ -104,10 +104,9 @@ public class TeacherFragment extends Fragment {
                     List<Pair> teacherPairs = result.stream().filter(pair-> pair.teacherSubject.Teacher.id == teacher.id).collect(Collectors.toList());
 
                     pairPutter.putPairs(teacherPairs, recyclerViewHashMap, null, null);
-                    uiLoadHandler.onDataUILoaded(viewsToHide, progressBar);
                 }
             });
-            uiLoadHandler.setLoadUI(viewsToHide, progressBar);
+            uiLoadHandler.setLoadUI();
         }
         catch(Exception e){
             Log.d("11111", e.getMessage());

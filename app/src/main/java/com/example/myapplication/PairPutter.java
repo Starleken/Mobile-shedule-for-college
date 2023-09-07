@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.example.myapplication.Adapters.LessonAdapter;
 import com.example.myapplication.Models.Pair;
@@ -14,8 +15,10 @@ import java.util.Map;
 
 public class PairPutter {
     private Context context;
+    private UILoadHandler uiLoadHandler;
 
-    public PairPutter(Context context){
+    public PairPutter(UILoadHandler uiLoadHandler, Context context){
+        this.uiLoadHandler = uiLoadHandler;
         this.context = context;
     }
 
@@ -42,6 +45,8 @@ public class PairPutter {
                     RecyclerViewContainer recyclerView = recyclerViewContainerHashMap.get(entry.getKey());
                     recyclerView.getRecyclerView().setAdapter(dayAdapter);
                 }
+
+                uiLoadHandler.onDataUILoaded();
 
                 for (RecyclerViewContainer container : recyclerViewContainerHashMap.values()){
                     if(container.getRecyclerView().getAdapter() == null){
