@@ -19,7 +19,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class PairGetter {
-    final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/pairs?isCurrentDate=1";
+    final private String URL_TO_READ = "http://188.225.77.116:5000/api/v1/pairs?isCurrentDate=1";
 
     public void GetAllPairs(ListCallback<Pair> pairCallback) throws Exception {
         Gson gson = new Gson();

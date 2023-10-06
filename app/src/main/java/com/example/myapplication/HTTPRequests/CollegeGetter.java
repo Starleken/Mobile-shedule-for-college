@@ -18,7 +18,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class CollegeGetter {
-    final private String URL_TO_READ = "http://185.250.44.61:5000/api/v1/colleges/";
+    final private String URL_TO_READ = "http://188.225.77.116:5000/api/v1/colleges/";
 
     public void GetAll(ListCallback<College> callback) throws Exception {
         Gson gson = new Gson();

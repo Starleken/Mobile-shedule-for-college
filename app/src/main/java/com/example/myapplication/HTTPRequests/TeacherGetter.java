@@ -20,7 +20,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class TeacherGetter {
-    final private String URL_TO_READ = "http://185.250.44.61:5002/api/v1/teachers";
+    final private String URL_TO_READ = "http://188.225.77.116:5000/api/v1/teachers";
 
     public void GetAll(ListCallback<Teacher> callback) throws Exception{
         Gson gson = new Gson();
